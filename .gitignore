@@ -1,0 +1,5 @@
+*.bak
+screenshots/
+.codex/
+.DS_Store
+Thumbs.db
