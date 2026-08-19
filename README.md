@@ -23,7 +23,13 @@ ES 모듈을 사용하므로 로컬 웹 서버에서 실행해야 합니다.
 
 브라우저에서 다음 주소를 엽니다.
 
-    http://127.0.0.1:8765/solar-system.html
+    http://127.0.0.1:8765/
+
+## 온라인에서 보기
+
+GitHub Pages에서 바로 실행할 수 있습니다.
+
+    https://kimgooneya.github.io/solar-system/
 
 ## 조작
 
