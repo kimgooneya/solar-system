@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="태양과 여덟 행성의 크기, 거리, 움직임을 비교하며 배우는 인터랙티브 3D 태양계 학습관">
+<meta name="description" content="태양과 여덟 행성의 크기·거리·움직임과 주요 유성우를 함께 배우는 인터랙티브 3D 태양계 학습관">
 <link rel="canonical" href="https://kimgooneya.github.io/solar-system/">
 <title>태양계 3D 탐험</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -94,9 +94,13 @@
   #planetNav button:hover{color:var(--text);background:rgba(255,255,255,.07)}
   #planetNav button[aria-current="true"]{color:#fff;border-color:rgba(122,184,255,.5);
     background:rgba(122,184,255,.16)}
+  #meteorNavButton{color:#ffd39f!important}
+  #meteorNavButton::before{content:'✦';margin-right:4px;color:#ffad5c}
+  #meteorNavButton[aria-current="true"]{border-color:rgba(255,173,92,.62)!important;
+    background:rgba(255,150,70,.18)!important;color:#fff4e5!important}
 
   #lessonLegend{right:18px;top:92px;padding:11px 13px;width:154px;transition:opacity .2s}
-  body.info-open #lessonLegend{opacity:0;pointer-events:none}
+  body.info-open #lessonLegend,body.meteor-open #lessonLegend{opacity:0;pointer-events:none}
   #lessonLegend strong{display:block;font-size:10.5px;letter-spacing:.12em;color:var(--dim);margin-bottom:7px}
   .legend-item{display:flex;align-items:center;gap:7px;font-size:10.5px;color:#cfd8e6;margin:5px 0}
   .legend-dot{width:7px;height:7px;border-radius:50%;box-shadow:0 0 8px currentColor}
@@ -133,6 +137,51 @@
   #sourceNote{font-size:9.5px;line-height:1.55;color:#78869f;margin-top:11px}
   #sourceNote a{color:#8fbfe9;text-underline-offset:2px}
 
+  /* meteor shower observatory */
+  #meteorPanel{right:18px;top:50%;transform:translateY(-50%);width:370px;
+    max-height:calc(100vh - 150px);overflow:auto;padding:20px}
+  #meteorClose{position:absolute;top:10px;right:10px;background:none;border:none;color:var(--dim);
+    font-size:16px;cursor:pointer;padding:4px 6px;line-height:1;border-radius:6px}
+  #meteorClose:hover{color:var(--text);background:rgba(255,255,255,.08)}
+  .meteor-eyebrow{font-size:9.5px;letter-spacing:.24em;color:#ffb974;margin-bottom:5px}
+  #meteorPanel h2{font-size:24px;letter-spacing:.08em}
+  .meteor-intro{margin:7px 0 14px;color:#b7c2d4;font-size:11.5px;line-height:1.6}
+  .meteor-feature{padding:14px;border-radius:12px;border:1px solid rgba(255,173,92,.25);
+    background:linear-gradient(145deg,rgba(255,151,65,.12),rgba(73,120,191,.08))}
+  .meteor-feature-top{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:8px}
+  #meteorStatus{padding:3px 7px;border-radius:999px;background:rgba(92,222,161,.13);
+    border:1px solid rgba(92,222,161,.32);color:#8ce8bb;font-size:9.5px;letter-spacing:.08em}
+  #meteorCountdown{font-size:10.5px;color:#ffd19d;font-variant-numeric:tabular-nums}
+  #meteorName{font-size:20px;letter-spacing:.06em}
+  #meteorEn{font-size:10px;color:#9fcaff;letter-spacing:.18em;text-transform:uppercase;margin-top:2px}
+  .meteor-date{display:flex;justify-content:space-between;gap:12px;margin-top:12px;padding-top:10px;
+    border-top:1px solid rgba(255,255,255,.08);font-size:10.5px;color:var(--dim)}
+  .meteor-date b{display:block;margin-top:2px;color:#ecf1f8;font-size:12px;font-weight:600}
+  .meteor-section-title{display:flex;justify-content:space-between;align-items:center;margin:15px 0 7px;
+    color:var(--dim);font-size:10px;letter-spacing:.12em}
+  .meteor-section-title span:last-child{letter-spacing:0;color:#72809a}
+  #meteorList{display:grid;grid-template-columns:repeat(3,1fr);gap:5px}
+  .meteor-chip{min-width:0;padding:7px 5px;border-radius:8px;border:1px solid rgba(255,255,255,.07);
+    background:rgba(255,255,255,.045);color:#c9d2e0;font:inherit;font-size:10px;cursor:pointer;
+    white-space:nowrap;overflow:hidden;text-overflow:ellipsis;transition:.18s}
+  .meteor-chip:hover{border-color:rgba(255,173,92,.4);background:rgba(255,173,92,.1)}
+  .meteor-chip[aria-selected="true"]{border-color:rgba(255,173,92,.62);color:#ffe1bd;
+    background:rgba(255,150,70,.16)}
+  .meteor-chip[data-active="true"]::after{content:'';display:inline-block;width:5px;height:5px;
+    margin-left:5px;border-radius:50%;background:#70e1ad;box-shadow:0 0 7px #70e1ad;vertical-align:1px}
+  .meteor-spec-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:6px;margin-top:9px}
+  .meteor-spec{padding:8px 9px;border:1px solid rgba(255,255,255,.06);border-radius:9px;
+    background:rgba(255,255,255,.04);min-width:0}
+  .meteor-spec span{display:block;color:var(--dim);font-size:9.5px;margin-bottom:3px}
+  .meteor-spec b{display:block;font-size:11px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  #meteorNote{font-size:11.5px;line-height:1.6;color:#ccd6e4;margin-top:10px}
+  .meteor-terms{display:grid;grid-template-columns:repeat(3,1fr);gap:5px;margin-top:12px}
+  .meteor-term{padding:7px 5px;border-radius:8px;background:rgba(91,139,209,.08);text-align:center}
+  .meteor-term b{display:block;color:#b9dcff;font-size:10px}
+  .meteor-term span{display:block;color:#7f8ca2;font-size:8.5px;margin-top:2px}
+  .meteor-source{margin-top:11px;font-size:9px;line-height:1.55;color:#738199}
+  .meteor-source a{color:#8fbfe9;text-underline-offset:2px}
+
   /* tour bar */
   #tourBar{left:50%;bottom:24px;transform:translateX(-50%);max-width:620px;width:calc(100% - 40px);
     padding:15px 20px 13px;text-align:center}
@@ -165,11 +214,11 @@
     #lessonLegend{top:110px;right:12px;width:auto;padding:7px 9px;display:flex;gap:9px}
     #lessonLegend strong{display:none}.legend-item{margin:0;font-size:9.5px}
     #controls{left:12px;right:12px;bottom:12px;width:auto;padding:12px 14px}
-    #infoPanel{left:12px;right:12px;top:auto;bottom:12px;transform:none;width:auto;max-height:58vh}
+    #infoPanel,#meteorPanel{left:12px;right:12px;top:auto;bottom:12px;transform:none;width:auto;max-height:58vh}
     body.tour-active #infoPanel{bottom:158px;max-height:42vh}
     #tourBar{bottom:12px;width:calc(100% - 24px);padding:12px 14px}
     #toast{bottom:192px;max-width:calc(100% - 24px);white-space:normal;text-align:center}
-    body.info-open #controls,body.tour-active #controls{opacity:0;pointer-events:none}
+    body.info-open #controls,body.meteor-open #controls,body.tour-active #controls{opacity:0;pointer-events:none}
   }
   @media (max-width:560px){
     #title p{display:none}#scaleBadge{max-width:138px}#planetNav{top:54px}
@@ -178,12 +227,13 @@
     #lessonLegend .legend-item{font-size:9px;gap:4px}.legend-dot{width:7px;height:7px}
     #controls .btnrow{display:grid;grid-template-columns:repeat(3,1fr)}
     #infoName{font-size:22px}.metric-grid{grid-template-columns:repeat(3,1fr)}
+    #meteorPanel h2{font-size:21px}#meteorList{grid-template-columns:repeat(3,1fr)}
     .tour-buttons .btn{padding:7px 10px}
   }
   @media (max-height:620px) and (orientation:landscape){
     #lessonLegend,#title p{display:none}#planetNav{top:12px;max-width:55%}
     #controls{width:224px;right:auto;max-height:76vh;overflow:auto}
-    #infoPanel{left:auto;right:12px;top:62px;bottom:12px;width:310px;max-height:none}
+    #infoPanel,#meteorPanel{left:auto;right:12px;top:62px;bottom:12px;width:330px;max-height:none}
     body.tour-active #infoPanel{display:none!important}
   }
   @media (prefers-reduced-motion:reduce){
@@ -210,7 +260,7 @@
   <button type="button" data-body-index="2">금성</button><button type="button" data-body-index="3">지구</button>
   <button type="button" data-body-index="4">화성</button><button type="button" data-body-index="5">목성</button>
   <button type="button" data-body-index="6">토성</button><button type="button" data-body-index="7">천왕성</button>
-  <button type="button" data-body-index="8">해왕성</button>
+  <button type="button" data-body-index="8">해왕성</button><button type="button" id="meteorNavButton" aria-current="false">유성우</button>
 </nav>
 
 <aside id="lessonLegend" class="panel" aria-label="행성 분류 범례">
@@ -277,6 +327,38 @@
   <p id="sourceNote">학습용으로 단순화한 시각화입니다. 세부 수치는
     <a href="https://science.nasa.gov/solar-system/" target="_blank" rel="noopener noreferrer">NASA 태양계 자료</a>와 함께 확인하세요.</p>
 </div>
+
+<section id="meteorPanel" class="panel hidden" role="region" aria-label="유성우 관측 정보" aria-live="polite" aria-hidden="true">
+  <button type="button" id="meteorClose" aria-label="유성우 관측소 닫기">✕</button>
+  <div class="meteor-eyebrow">EARTH ATMOSPHERE</div>
+  <h2>유성우 관측소</h2>
+  <p class="meteor-intro">지구가 혜성이나 소행성이 남긴 먼지 흐름을 지날 때 나타나는 빛의 궤적을 살펴보세요.</p>
+  <div class="meteor-feature">
+    <div class="meteor-feature-top"><span id="meteorStatus"></span><span id="meteorCountdown"></span></div>
+    <h3 id="meteorName"></h3>
+    <div id="meteorEn"></div>
+    <div class="meteor-date">
+      <div><span>통상 극대</span><b id="meteorPeak"></b></div>
+      <div><span>활동 기간</span><b id="meteorActivity"></b></div>
+    </div>
+  </div>
+  <div class="meteor-section-title"><span>주요 유성우 선택</span><span>초록 점은 활동 중</span></div>
+  <div id="meteorList" role="listbox" aria-label="주요 유성우"></div>
+  <div class="meteor-spec-grid">
+    <div class="meteor-spec"><span>이상적 시간당 수</span><b id="meteorZhr"></b></div>
+    <div class="meteor-spec"><span>진입 속도</span><b id="meteorSpeed"></b></div>
+    <div class="meteor-spec"><span>복사점</span><b id="meteorRadiant"></b></div>
+    <div class="meteor-spec"><span>모천체</span><b id="meteorParent"></b></div>
+  </div>
+  <p id="meteorNote"></p>
+  <div class="meteor-terms" aria-label="유성 관련 용어">
+    <div class="meteor-term"><b>유성체</b><span>우주 공간의 암석</span></div>
+    <div class="meteor-term"><b>유성</b><span>대기권의 빛</span></div>
+    <div class="meteor-term"><b>운석</b><span>지표에 닿은 조각</span></div>
+  </div>
+  <p class="meteor-source">날짜와 ZHR은 해마다 달라질 수 있는 학습용 기준값입니다. 관측 전에는
+    <a href="https://www.imo.net/resources/calendar/" target="_blank" rel="noopener noreferrer">IMO 유성우 달력</a>을 확인하세요.</p>
+</section>
 
 <div id="tourBar" class="panel hidden" role="region" aria-label="행성 학습 투어">
   <div id="narration" aria-live="polite"></div>
@@ -435,6 +517,46 @@ const PLANET_DATA = [
     narration:'태양계의 끝자락, 해왕성입니다. 짙푸른 빛 속에서 강한 바람이 몰아칩니다.' }
 ];
 
+/* 주요 연례 유성우의 통상 활동 기간과 극대일. 정확한 극대 시각은 매년 달라진다. */
+const METEOR_SHOWER_DATA = [
+  { key:'quadrantids', nameKo:'사분의자리 유성우', nameEn:'Quadrantids',
+    activity:[[12, 28], [1, 12]], peak:[1, 3], zhr:120, speed:41,
+    radiant:'목동자리 북쪽', parent:'2003 EH₁', color:0x9fc7ff, direction:[-1.0, -0.22, 0.34],
+    note:'짧고 날카로운 극대를 보이는 겨울 유성우입니다. 극대 전후 몇 시간의 관측 조건이 특히 중요합니다.' },
+  { key:'lyrids', nameKo:'거문고자리 유성우', nameEn:'Lyrids',
+    activity:[[4, 14], [4, 30]], peak:[4, 22], zhr:18, speed:49,
+    radiant:'거문고자리', parent:'C/1861 G1 대처', color:0xb7d9ff, direction:[-0.72, -0.55, -0.43],
+    note:'오래전부터 관측된 봄철 유성우로, 간혹 예상보다 많은 유성이 나타나기도 합니다.' },
+  { key:'eta-aquariids', nameKo:'에타 물병자리 유성우', nameEn:'Eta Aquariids',
+    activity:[[4, 19], [5, 28]], peak:[5, 6], zhr:50, speed:66,
+    radiant:'물병자리', parent:'1P/핼리', color:0x70d9ff, direction:[-0.56, 0.18, -0.81],
+    note:'핼리 혜성이 남긴 먼지에서 비롯됩니다. 남반구에서 더 잘 보이며 북반구에서는 동트기 전 낮은 하늘이 유리합니다.' },
+  { key:'delta-aquariids', nameKo:'남델타 물병자리 유성우', nameEn:'Southern Delta Aquariids',
+    activity:[[7, 12], [8, 23]], peak:[7, 30], zhr:25, speed:41,
+    radiant:'물병자리 남쪽', parent:'96P/마크홀츠 계열', color:0x74c8ff, direction:[-0.48, 0.52, -0.71],
+    note:'극대가 완만하고 여러 주 동안 이어집니다. 달빛이 적은 새벽 시간에 긴 관측을 하면 유리합니다.' },
+  { key:'perseids', nameKo:'페르세우스자리 유성우', nameEn:'Perseids',
+    activity:[[7, 17], [8, 24]], peak:[8, 13], zhr:100, speed:59,
+    radiant:'페르세우스자리', parent:'109P/스위프트-터틀', color:0xffb36b, direction:[-0.88, -0.34, 0.33],
+    note:'북반구의 대표적인 여름 유성우입니다. 복사점이 높아지는 자정 이후부터 새벽 사이가 관측에 좋습니다.' },
+  { key:'orionids', nameKo:'오리온자리 유성우', nameEn:'Orionids',
+    activity:[[10, 2], [11, 7]], peak:[10, 21], zhr:20, speed:66,
+    radiant:'오리온자리', parent:'1P/핼리', color:0x8de1ff, direction:[-0.64, -0.18, 0.75],
+    note:'에타 물병자리 유성우와 같은 핼리 혜성의 먼지 흐름에서 생기며, 빠르고 긴 흔적을 남기는 유성이 많습니다.' },
+  { key:'leonids', nameKo:'사자자리 유성우', nameEn:'Leonids',
+    activity:[[11, 6], [11, 30]], peak:[11, 17], zhr:15, speed:71,
+    radiant:'사자자리', parent:'55P/템펠-터틀', color:0xff9b76, direction:[-0.78, 0.43, 0.45],
+    note:'매우 빠른 유성으로 유명합니다. 모혜성의 먼지 띠와 조건이 맞는 해에는 활동량이 크게 늘 수 있습니다.' },
+  { key:'geminids', nameKo:'쌍둥이자리 유성우', nameEn:'Geminids',
+    activity:[[12, 4], [12, 17]], peak:[12, 14], zhr:150, speed:35,
+    radiant:'쌍둥이자리', parent:'3200 파에톤', color:0xffd27d, direction:[-0.52, -0.67, 0.53],
+    note:'혜성이 아닌 소행성 파에톤과 관련된 강한 유성우입니다. 비교적 느리고 밝은 유성을 볼 가능성이 높습니다.' },
+  { key:'ursids', nameKo:'작은곰자리 유성우', nameEn:'Ursids',
+    activity:[[12, 17], [12, 26]], peak:[12, 22], zhr:10, speed:33,
+    radiant:'작은곰자리', parent:'8P/터틀', color:0xd3bcff, direction:[-0.93, 0.12, -0.35],
+    note:'동지 무렵 북쪽 하늘에서 관측되는 작은 유성우입니다. 활동량은 낮지만 간헐적인 증가가 보고됩니다.' }
+];
+
 /* ============================================================
    DOM refs
 ============================================================ */
@@ -457,6 +579,12 @@ const ui = {
   sizeBar: $('sizeBar'), dayBar: $('dayBar'), yearBar: $('yearBar'),
   infoTemp: $('infoTemp'), infoMoons: $('infoMoons'),
   infoFact1: $('infoFact1'), infoFact2: $('infoFact2'),
+  meteorNav: $('meteorNavButton'), meteorPanel: $('meteorPanel'), meteorClose: $('meteorClose'),
+  meteorStatus: $('meteorStatus'), meteorCountdown: $('meteorCountdown'),
+  meteorName: $('meteorName'), meteorEn: $('meteorEn'), meteorPeak: $('meteorPeak'),
+  meteorActivity: $('meteorActivity'), meteorList: $('meteorList'),
+  meteorZhr: $('meteorZhr'), meteorSpeed: $('meteorSpeed'),
+  meteorRadiant: $('meteorRadiant'), meteorParent: $('meteorParent'), meteorNote: $('meteorNote'),
   tourBar: $('tourBar'), narration: $('narration'), tourStep: $('tourStep'),
   tourPrev: $('tourPrev'), tourPause: $('tourPause'),
   tourNext: $('tourNext'), tourStop: $('tourStop'),
@@ -1305,6 +1433,98 @@ PLANET_DATA.forEach((d, idx) => {
 });
 
 /* ============================================================
+   유성우 — 지구 대기권 진입 개념 시각화
+============================================================ */
+const meteorShowerGroup = new THREE.Group();
+meteorShowerGroup.visible = false;
+earthBody.group.add(meteorShowerGroup);
+
+const meteorAtmosphereMat = new THREE.MeshBasicMaterial({
+  color:0xffb36b, transparent:true, opacity:0.13, wireframe:true,
+  blending:THREE.AdditiveBlending, depthWrite:false
+});
+const meteorAtmosphereGuide = new THREE.Mesh(
+  new THREE.SphereGeometry(earthBody.radius * 1.18, 32, 18), meteorAtmosphereMat);
+meteorShowerGroup.add(meteorAtmosphereGuide);
+
+const meteorModeLabel = makeLabel('유성우 · 지구 대기권', 'label meteor-label');
+meteorModeLabel.position.set(0, earthBody.radius + 2.8, 0);
+meteorShowerGroup.add(meteorModeLabel);
+
+const meteorRnd = mulberry32(8122026);
+const meteorTravelDir = new THREE.Vector3(-0.88, -0.34, 0.33).normalize();
+const meteorTangent = new THREE.Vector3();
+const meteorBitangent = new THREE.Vector3();
+const meteorImpact = new THREE.Vector3();
+const meteorHead = new THREE.Vector3();
+const meteorTail = new THREE.Vector3();
+const meteorStreaks = [];
+const meteorStreakCount = reduceMotion ? 8 : 24;
+
+for (let i = 0; i < meteorStreakCount; i++){
+  const positions = new Float32Array(6);
+  const geometry = new THREE.BufferGeometry();
+  const position = new THREE.BufferAttribute(positions, 3);
+  position.setUsage(THREE.DynamicDrawUsage);
+  geometry.setAttribute('position', position);
+  const material = new THREE.LineBasicMaterial({
+    color:0xffb36b, transparent:true, opacity:0.52 + meteorRnd() * 0.38,
+    blending:THREE.AdditiveBlending, depthWrite:false
+  });
+  const line = new THREE.Line(geometry, material);
+  line.frustumCulled = false;
+  meteorShowerGroup.add(line);
+  meteorStreaks.push({
+    line,
+    progress:meteorRnd(),
+    speed:0.28 + meteorRnd() * 0.5,
+    offsetA:(meteorRnd() - 0.5) * earthBody.radius * 1.55,
+    offsetB:(meteorRnd() - 0.5) * earthBody.radius * 1.55,
+    length:0.65 + meteorRnd() * 1.15,
+    delay:meteorRnd() * 0.55
+  });
+}
+
+function updateMeteorBasis(){
+  const reference = Math.abs(meteorTravelDir.y) > 0.92
+    ? new THREE.Vector3(1, 0, 0) : new THREE.Vector3(0, 1, 0);
+  meteorTangent.crossVectors(meteorTravelDir, reference).normalize();
+  meteorBitangent.crossVectors(meteorTravelDir, meteorTangent).normalize();
+}
+function writeMeteorStreak(streak){
+  const visibleProgress = THREE.MathUtils.clamp((streak.progress - streak.delay) / (1 - streak.delay), 0, 1);
+  const approach = earthBody.radius * 1.08 + (1 - visibleProgress) * 8.5;
+  meteorImpact.copy(meteorTangent).multiplyScalar(streak.offsetA)
+    .addScaledVector(meteorBitangent, streak.offsetB);
+  meteorHead.copy(meteorImpact).addScaledVector(meteorTravelDir, -approach);
+  meteorTail.copy(meteorHead).addScaledVector(meteorTravelDir, -streak.length);
+  const attr = streak.line.geometry.attributes.position;
+  attr.setXYZ(0, meteorTail.x, meteorTail.y, meteorTail.z);
+  attr.setXYZ(1, meteorHead.x, meteorHead.y, meteorHead.z);
+  attr.needsUpdate = true;
+  streak.line.visible = streak.progress >= streak.delay;
+}
+function resetMeteorStreaks(){
+  updateMeteorBasis();
+  meteorStreaks.forEach(writeMeteorStreak);
+}
+function updateMeteorShower(dt){
+  if (!meteorShowerGroup.visible) return;
+  for (const streak of meteorStreaks){
+    streak.progress += dt * streak.speed;
+    if (streak.progress > 1){
+      streak.progress = 0;
+      streak.delay = meteorRnd() * 0.5;
+      streak.offsetA = (meteorRnd() - 0.5) * earthBody.radius * 1.55;
+      streak.offsetB = (meteorRnd() - 0.5) * earthBody.radius * 1.55;
+    }
+    writeMeteorStreak(streak);
+  }
+  meteorAtmosphereMat.opacity = 0.11 + Math.sin(worldTime * 2.2) * 0.025;
+}
+resetMeteorStreaks();
+
+/* ============================================================
    소행성대 — InstancedMesh
 ============================================================ */
 const beltRnd = mulberry32(2024);
@@ -1724,6 +1944,170 @@ const hideInfo = () => {
 ui.infoClose.addEventListener('click', hideInfo);
 
 /* ============================================================
+   유성우 관측소
+============================================================ */
+const DAY_MS = 86400000;
+const meteorMode = { active:false, selected:0, buttons:[] };
+
+function annualDate(year, monthDay){
+  return new Date(year, monthDay[0] - 1, monthDay[1], 12, 0, 0, 0);
+}
+function meteorSeason(shower, startYear){
+  const start = annualDate(startYear, shower.activity[0]);
+  const end = annualDate(startYear, shower.activity[1]);
+  const peak = annualDate(startYear, shower.peak);
+  if (end < start) end.setFullYear(end.getFullYear() + 1);
+  if (peak < start) peak.setFullYear(peak.getFullYear() + 1);
+  return { start, end, peak };
+}
+function meteorSeasonsAround(shower, now){
+  const year = now.getFullYear();
+  return [-1, 0, 1, 2].map(offset => meteorSeason(shower, year + offset));
+}
+function startOfLocalDay(date){
+  return new Date(date.getFullYear(), date.getMonth(), date.getDate(), 12, 0, 0, 0);
+}
+function activeMeteorSeason(shower, now){
+  const today = startOfLocalDay(now);
+  return meteorSeasonsAround(shower, now).find(season => today >= season.start && today <= season.end) || null;
+}
+function nextMeteorSeason(shower, now){
+  const today = startOfLocalDay(now);
+  return meteorSeasonsAround(shower, now).find(season => season.peak >= today)
+    || meteorSeason(shower, now.getFullYear() + 2);
+}
+function nextMeteorIndex(now = new Date()){
+  let bestIndex = 0;
+  let bestPeak = Infinity;
+  METEOR_SHOWER_DATA.forEach((shower, index) => {
+    const peak = nextMeteorSeason(shower, now).peak.getTime();
+    if (peak < bestPeak){ bestPeak = peak; bestIndex = index; }
+  });
+  return bestIndex;
+}
+function featuredMeteorIndex(now = new Date()){
+  let activeIndex = -1;
+  let activeZhr = -1;
+  METEOR_SHOWER_DATA.forEach((shower, index) => {
+    if (activeMeteorSeason(shower, now) && shower.zhr > activeZhr){
+      activeIndex = index;
+      activeZhr = shower.zhr;
+    }
+  });
+  return activeIndex >= 0 ? activeIndex : nextMeteorIndex(now);
+}
+function formatMeteorDate(date, includeYear = false){
+  return new Intl.DateTimeFormat('ko-KR', {
+    ...(includeYear ? { year:'numeric' } : {}), month:'long', day:'numeric'
+  }).format(date);
+}
+function formatMeteorActivity(season){
+  return `${formatMeteorDate(season.start)}–${formatMeteorDate(season.end)}`;
+}
+function meteorCountdownText(days, active){
+  if (days === 0) return '오늘 극대';
+  if (days > 0) return `극대 D-${days}`;
+  return active ? `극대 +${Math.abs(days)}일` : '극대 지남';
+}
+function buildMeteorList(){
+  if (meteorMode.buttons.length) return;
+  METEOR_SHOWER_DATA.forEach((shower, index) => {
+    const button = document.createElement('button');
+    button.type = 'button';
+    button.className = 'meteor-chip';
+    button.setAttribute('role', 'option');
+    button.textContent = shower.nameKo.replace(' 유성우', '');
+    button.title = shower.nameKo;
+    button.addEventListener('click', () => selectMeteorShower(index));
+    ui.meteorList.appendChild(button);
+    meteorMode.buttons.push(button);
+  });
+}
+function refreshMeteorActivity(now = new Date()){
+  METEOR_SHOWER_DATA.forEach((shower, index) => {
+    meteorMode.buttons[index]?.setAttribute('data-active', String(Boolean(activeMeteorSeason(shower, now))));
+  });
+}
+function selectMeteorShower(index){
+  const shower = METEOR_SHOWER_DATA[index];
+  if (!shower) return;
+  meteorMode.selected = index;
+  const now = new Date();
+  const active = activeMeteorSeason(shower, now);
+  const season = active || nextMeteorSeason(shower, now);
+  const daysToPeak = Math.round((season.peak - startOfLocalDay(now)) / DAY_MS);
+
+  ui.meteorStatus.textContent = active ? '활동 중' : '다음 관측 시기';
+  ui.meteorStatus.style.color = active ? '#8ce8bb' : '#b9dcff';
+  ui.meteorStatus.style.borderColor = active ? 'rgba(92,222,161,.32)' : 'rgba(122,184,255,.32)';
+  ui.meteorStatus.style.background = active ? 'rgba(92,222,161,.13)' : 'rgba(122,184,255,.12)';
+  ui.meteorCountdown.textContent = meteorCountdownText(daysToPeak, Boolean(active));
+  ui.meteorName.textContent = shower.nameKo;
+  ui.meteorEn.textContent = shower.nameEn;
+  ui.meteorPeak.textContent = formatMeteorDate(season.peak, true);
+  ui.meteorActivity.textContent = formatMeteorActivity(season);
+  ui.meteorZhr.textContent = `약 ${shower.zhr}개/시간`;
+  ui.meteorSpeed.textContent = `약 ${shower.speed} km/s`;
+  ui.meteorRadiant.textContent = shower.radiant;
+  ui.meteorParent.textContent = shower.parent;
+  ui.meteorParent.title = shower.parent;
+  ui.meteorNote.textContent = shower.note;
+  meteorMode.buttons.forEach((button, buttonIndex) => {
+    button.setAttribute('aria-selected', String(buttonIndex === index));
+  });
+
+  meteorTravelDir.fromArray(shower.direction).normalize();
+  const color = new THREE.Color(shower.color);
+  meteorAtmosphereMat.color.copy(color);
+  meteorStreaks.forEach(streak => streak.line.material.color.copy(color));
+  resetMeteorStreaks();
+}
+function flyToMeteorView(){
+  const bp = bodyWorldPos(earthBody, new THREE.Vector3());
+  const offset = camera.position.clone().sub(bp);
+  offset.y = Math.abs(offset.y) * 0.45 + 3.2;
+  if (offset.lengthSq() < 1e-4) offset.set(7, 5, 10);
+  offset.normalize().multiplyScalar(15);
+  followBody = null;
+  bodyWorldPos(earthBody, lastBodyPos);
+  startFlight(bp.clone().add(offset), bp, { body:earthBody, offset, onDone:() => {
+    followBody = earthBody;
+  }});
+}
+function enterMeteorMode(){
+  if (cmp.active) exitCmp(false);
+  if (tour.active) exitTour(false);
+  hideInfo();
+  if (activeQuality.id !== 'saver') ensureEarthTextures();
+  meteorMode.active = true;
+  meteorShowerGroup.visible = true;
+  ui.meteorPanel.classList.remove('hidden');
+  ui.meteorPanel.setAttribute('aria-hidden', 'false');
+  ui.meteorPanel.scrollTop = 0;
+  ui.meteorNav.setAttribute('aria-current', 'true');
+  document.body.classList.add('meteor-open');
+  navButtons.forEach(button => button.setAttribute('aria-current', 'false'));
+  buildMeteorList();
+  refreshMeteorActivity();
+  selectMeteorShower(meteorMode.selected);
+  flyToMeteorView();
+}
+function exitMeteorMode(fly = true){
+  if (!meteorMode.active) return;
+  meteorMode.active = false;
+  meteorShowerGroup.visible = false;
+  ui.meteorPanel.classList.add('hidden');
+  ui.meteorPanel.setAttribute('aria-hidden', 'true');
+  ui.meteorNav.setAttribute('aria-current', 'false');
+  document.body.classList.remove('meteor-open');
+  followBody = null;
+  if (fly) flyOverview();
+}
+meteorMode.selected = featuredMeteorIndex();
+ui.meteorNav.addEventListener('click', () => meteorMode.active ? exitMeteorMode() : enterMeteorMode());
+ui.meteorClose.addEventListener('click', () => exitMeteorMode());
+
+/* ============================================================
    투어 모드
 ============================================================ */
 const tour = { active: false, idx: 0, paused: false, timer: 0 };
@@ -1745,6 +2129,7 @@ function tourGo(i){
 }
 function startTour(){
   if (cmp.active) exitCmp(false);
+  if (meteorMode.active) exitMeteorMode(false);
   tour.active = true; tour.paused = false; tour.timer = 0;
   ui.tourPause.textContent = '일시정지';
   ui.tourPause.setAttribute('aria-pressed', 'false');
@@ -1787,6 +2172,7 @@ function setSceneVisible(v){
 }
 function enterCmp(){
   if (tour.active) exitTour(false);
+  if (meteorMode.active) exitMeteorMode(false);
   cmp.active = true;
   cmp.savedCam.copy(camera.position);
   cmp.savedTarget.copy(controls.target);
@@ -1856,6 +2242,7 @@ function selectBody(index){
   const body = bodies[index];
   if (!body) return;
   if (tour.active) exitTour(false);
+  if (meteorMode.active) exitMeteorMode(false);
   showInfo(body);
   if (!cmp.active) flyToBody(body);
 }
@@ -1865,6 +2252,7 @@ navButtons.forEach(button => {
 function resetView(){
   if (tour.active) exitTour(false);
   if (cmp.active) exitCmp(false);
+  if (meteorMode.active) exitMeteorMode(false);
   followBody = null;
   hideInfo();
   navButtons.forEach(button => button.setAttribute('aria-current', 'false'));
@@ -1886,6 +2274,7 @@ window.addEventListener('keydown', e => {
   if (e.key === 'Escape'){
     if (tour.active) exitTour();
     else if (cmp.active) exitCmp();
+    else if (meteorMode.active) exitMeteorMode();
     else hideInfo();
   }
 });
@@ -1913,6 +2302,7 @@ renderer.domElement.addEventListener('pointerup', e => {
   const b = pickAt(e.clientX, e.clientY);
   if (!b) return;
   if (cmp.active){ showInfo(b); return; }  // 비교 모드에선 정보만
+  if (meteorMode.active) exitMeteorMode(false);
   showInfo(b);
   flyToBody(b);
 });
@@ -2048,6 +2438,7 @@ function tick(timestamp){
       if (b.clouds) b.clouds.rotation.y += spin * 1.18 + dt * 0.006;
     }
     if (moonPivot) moonPivot.rotation.y += Math.min(TAU * days / 27.3, 0.3);
+    if (meteorMode.active) updateMeteorShower(dt);
     asteroidDaysAccum += days;
     asteroidDtAccum += dt;
     if (asteroidDtAccum >= 1 / activeQuality.asteroidFps){
