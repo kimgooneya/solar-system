@@ -85,6 +85,8 @@
   #scaleBadge span:last-child{display:block;margin-top:2px;font-size:10.5px;line-height:1.45;color:var(--dim)}
   #scaleBadge[data-mode="actual"] .scale-dot{background:#76c7ff;box-shadow:0 0 14px rgba(118,199,255,.75)}
   #scaleBadge[data-mode="actual"] strong{color:#bce4ff}
+  #scaleBadge[data-mode="scenario"] .scale-dot{background:#b899ff;box-shadow:0 0 14px rgba(184,153,255,.8)}
+  #scaleBadge[data-mode="scenario"] strong{color:#d9c8ff}
 
   #planetNav{top:82px;left:50%;transform:translateX(-50%);display:flex;gap:4px;padding:5px;
     max-width:calc(100% - 430px);overflow-x:auto;scrollbar-width:none}
@@ -102,9 +104,14 @@
   #cometNavButton::before{content:'☄';margin-right:4px;color:#7bdcff}
   #cometNavButton[aria-current="true"]{border-color:rgba(92,213,255,.62)!important;
     background:rgba(62,174,218,.18)!important;color:#effbff!important}
+  #scenarioNavButton{color:#d9c8ff!important}
+  #scenarioNavButton::before{content:'➤';margin-right:4px;color:#b899ff}
+  #scenarioNavButton[aria-current="true"]{border-color:rgba(184,153,255,.65)!important;
+    background:rgba(139,101,225,.2)!important;color:#f4eeff!important}
 
   #lessonLegend{right:18px;top:92px;padding:11px 13px;width:154px;transition:opacity .2s}
-  body.info-open #lessonLegend,body.meteor-open #lessonLegend,body.comet-open #lessonLegend{opacity:0;pointer-events:none}
+  body.info-open #lessonLegend,body.meteor-open #lessonLegend,body.comet-open #lessonLegend,
+  body.scenario-open #lessonLegend{opacity:0;pointer-events:none}
   #lessonLegend strong{display:block;font-size:10.5px;letter-spacing:.12em;color:var(--dim);margin-bottom:7px}
   .legend-item{display:flex;align-items:center;gap:7px;font-size:10.5px;color:#cfd8e6;margin:5px 0}
   .legend-dot{width:7px;height:7px;border-radius:50%;box-shadow:0 0 8px currentColor}
@@ -113,9 +120,9 @@
   /* info panel */
   #infoPanel{right:18px;top:50%;transform:translateY(-50%);width:330px;max-height:calc(100vh - 220px);
     overflow:auto;padding:20px 20px 18px}
-  #infoPanel,#meteorPanel,#cometPanel{scrollbar-width:thin;scrollbar-color:rgba(125,178,213,.45) transparent}
-  #infoPanel::-webkit-scrollbar,#meteorPanel::-webkit-scrollbar,#cometPanel::-webkit-scrollbar{width:6px}
-  #infoPanel::-webkit-scrollbar-thumb,#meteorPanel::-webkit-scrollbar-thumb,#cometPanel::-webkit-scrollbar-thumb{
+  #infoPanel,#meteorPanel,#cometPanel,#scenarioPanel{scrollbar-width:thin;scrollbar-color:rgba(125,178,213,.45) transparent}
+  #infoPanel::-webkit-scrollbar,#meteorPanel::-webkit-scrollbar,#cometPanel::-webkit-scrollbar,#scenarioPanel::-webkit-scrollbar{width:6px}
+  #infoPanel::-webkit-scrollbar-thumb,#meteorPanel::-webkit-scrollbar-thumb,#cometPanel::-webkit-scrollbar-thumb,#scenarioPanel::-webkit-scrollbar-thumb{
     background:rgba(125,178,213,.42);border-radius:999px}
   #infoClose{position:absolute;top:10px;right:10px;background:none;border:none;color:var(--dim);
     font-size:16px;cursor:pointer;padding:4px 6px;line-height:1;border-radius:6px}
@@ -241,6 +248,49 @@
   .comet-label.sunward{color:#ffd39f}.comet-label.dust{color:#ffd6a1}.comet-label.ion{color:#91e8ff}
   #cometInfoToggle{display:none;right:14px;bottom:14px;padding:9px 14px;border:1px solid rgba(92,213,255,.5);
     border-radius:999px;background:rgba(9,28,45,.86);color:#dff8ff;font:inherit;font-size:11px;cursor:pointer}
+  /* cinematic spacecraft scenarios */
+  #scenarioPanel{right:18px;top:50%;transform:translateY(-50%);width:405px;
+    max-height:calc(100vh - 145px);overflow:auto;padding:20px}
+  #scenarioClose{position:absolute;top:10px;right:10px;background:none;border:none;color:var(--dim);
+    font-size:16px;cursor:pointer;padding:4px 6px;line-height:1;border-radius:6px}
+  #scenarioClose:hover{color:var(--text);background:rgba(255,255,255,.08)}
+  #scenarioEyebrow{font-size:9.5px;letter-spacing:.2em;color:#bfa4ff;margin-bottom:5px}
+  #scenarioPanel h2{font-size:22px;line-height:1.35;letter-spacing:.04em;padding-right:24px}
+  #scenarioDescription{margin:8px 0 13px;color:#bdc7d8;font-size:11.5px;line-height:1.65}
+  .scenario-tabs{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:12px}
+  .scenario-tab{padding:8px;border-radius:9px;border:1px solid rgba(255,255,255,.08);
+    background:rgba(255,255,255,.045);color:#c7d0de;font:inherit;font-size:11px;cursor:pointer}
+  .scenario-tab:hover{border-color:rgba(184,153,255,.4);background:rgba(184,153,255,.09)}
+  .scenario-tab[aria-selected="true"]{color:#f0e9ff;border-color:rgba(184,153,255,.6);
+    background:linear-gradient(135deg,rgba(132,94,218,.22),rgba(75,131,201,.13))}
+  #scenarioStatus{min-height:105px;padding:12px 13px;border-radius:11px;
+    border:1px solid rgba(184,153,255,.24);background:linear-gradient(145deg,rgba(139,99,225,.13),rgba(53,113,181,.08))}
+  #scenarioStatus span{display:block;color:#bfa4ff;font-size:9px;letter-spacing:.17em}
+  #scenarioStatus b{display:block;margin-top:4px;color:#f4f0fb;font-size:12px}
+  #scenarioStatus p{margin-top:6px;color:#cbd3e1;font-size:11.5px;line-height:1.55}
+  #scenarioProgress{width:100%;margin:12px 0 7px;accent-color:#b899ff}
+  .scenario-controls{display:grid;grid-template-columns:1fr 1.25fr 1fr 1.25fr;gap:5px;margin-bottom:12px}
+  .scenario-controls .btn{padding:7px 4px;font-size:10.5px}
+  .scenario-section-title{display:flex;align-items:center;justify-content:space-between;margin:8px 0 7px;
+    color:var(--dim);font-size:9.5px;letter-spacing:.13em}
+  .scenario-section-title span:last-child{letter-spacing:0;color:#76849a}
+  #scenarioEvents{display:grid;gap:5px}
+  .scenario-event{display:flex;align-items:center;gap:9px;width:100%;padding:7px 8px;text-align:left;
+    border-radius:9px;border:1px solid rgba(255,255,255,.065);background:rgba(255,255,255,.035);
+    color:#bcc6d5;font:inherit;cursor:pointer;transition:.18s}
+  .scenario-event:hover{border-color:rgba(184,153,255,.35);background:rgba(184,153,255,.08)}
+  .scenario-event>span{display:grid;place-items:center;flex:0 0 23px;width:23px;height:23px;border-radius:50%;
+    border:1px solid rgba(255,255,255,.15);color:#7f8da3;font-size:9px}
+  .scenario-event div{min-width:0}.scenario-event small{display:block;color:#75849b;font-size:8px;letter-spacing:.12em}
+  .scenario-event b{display:block;margin-top:1px;font-size:10.5px;font-weight:500;white-space:nowrap;
+    overflow:hidden;text-overflow:ellipsis}
+  .scenario-event.completed>span{border-color:rgba(116,220,176,.38);color:#8ee7be;background:rgba(116,220,176,.09)}
+  .scenario-event[aria-current="true"]{border-color:rgba(184,153,255,.58);background:rgba(137,98,225,.16);color:#f2edfc}
+  .scenario-event[aria-current="true"]>span{border-color:#b899ff;color:#fff;background:rgba(184,153,255,.2);box-shadow:0 0 10px rgba(184,153,255,.24)}
+  #scenarioFact{margin-top:11px;padding-top:9px;border-top:1px solid rgba(255,255,255,.07);
+    color:#77869c;font-size:9.5px;line-height:1.55}
+  .scenario-label{color:#d9c8ff;font-size:9.5px;letter-spacing:.06em}
+  .scenario-system-label{color:#ffe1ad;font-size:11px;letter-spacing:.12em}
 
   /* tour bar */
   #tourBar{left:50%;bottom:24px;transform:translateX(-50%);max-width:620px;width:calc(100% - 40px);
@@ -275,12 +325,13 @@
     #lessonLegend{top:110px;right:12px;width:auto;padding:7px 9px;display:flex;gap:9px}
     #lessonLegend strong{display:none}.legend-item{margin:0;font-size:9.5px}
     #controls{left:12px;right:12px;bottom:12px;width:auto;padding:12px 14px}
-    #infoPanel,#meteorPanel,#cometPanel{left:12px;right:12px;top:auto;bottom:12px;transform:none;width:auto;max-height:58vh}
+    #infoPanel,#meteorPanel,#cometPanel,#scenarioPanel{left:12px;right:12px;top:auto;bottom:12px;transform:none;width:auto;max-height:62vh}
     #cometPanel{max-height:55vh}
     body.tour-active #infoPanel{bottom:158px;max-height:42vh}
     #tourBar{bottom:12px;width:calc(100% - 24px);padding:12px 14px}
     #toast{bottom:192px;max-width:calc(100% - 24px);white-space:normal;text-align:center}
-    body.info-open #controls,body.meteor-open #controls,body.comet-open #controls,body.tour-active #controls{opacity:0;pointer-events:none}
+    body.info-open #controls,body.meteor-open #controls,body.comet-open #controls,
+    body.scenario-open #controls,body.tour-active #controls{opacity:0;pointer-events:none}
   }
   @media (max-width:560px){
     #title p{display:none}#scaleBadge{max-width:138px}#planetNav{top:54px}
@@ -298,7 +349,7 @@
   @media (max-height:620px) and (orientation:landscape){
     #lessonLegend,#title p{display:none}#planetNav{top:12px;max-width:55%}
     #controls{width:224px;right:auto;max-height:76vh;overflow:auto}
-    #infoPanel,#meteorPanel,#cometPanel{left:auto;right:12px;top:62px;bottom:12px;width:350px;max-height:none}
+    #infoPanel,#meteorPanel,#cometPanel,#scenarioPanel{left:auto;right:12px;top:62px;bottom:12px;width:360px;max-height:none}
     body.tour-active #infoPanel{display:none!important}
   }
   @media (prefers-reduced-motion:reduce){
@@ -327,6 +378,7 @@
   <button type="button" data-body-index="6">토성</button><button type="button" data-body-index="7">천왕성</button>
   <button type="button" data-body-index="8">해왕성</button><button type="button" id="meteorNavButton" aria-current="false">유성우</button>
   <button type="button" id="cometNavButton" aria-current="false">혜성</button>
+  <button type="button" id="scenarioNavButton" aria-current="false">영화 항로</button>
 </nav>
 
 <aside id="lessonLegend" class="panel" aria-label="행성 분류 범례">
@@ -465,6 +517,28 @@
     <a id="cometSourceLink" href="https://science.nasa.gov/solar-system/comets/1p-halley/" target="_blank" rel="noopener noreferrer">개별 자료</a>를 확인하세요.</p>
 </section>
 <button type="button" id="cometInfoToggle" class="panel" aria-label="혜성 정보 패널 열기">혜성 정보</button>
+<section id="scenarioPanel" class="panel hidden" role="region" aria-label="영화 속 우주선 항로" aria-live="polite" aria-hidden="true">
+  <button type="button" id="scenarioClose" aria-label="영화 항로 닫기">✕</button>
+  <div id="scenarioEyebrow"></div>
+  <h2 id="scenarioTitle"></h2>
+  <p id="scenarioDescription"></p>
+  <div class="scenario-tabs" role="tablist" aria-label="영화 시나리오 선택">
+    <button type="button" class="scenario-tab" data-scenario="martian" role="tab" aria-selected="true">마션</button>
+    <button type="button" class="scenario-tab" data-scenario="hailmary" role="tab" aria-selected="false">프로젝트 헤일메리</button>
+  </div>
+  <div id="scenarioStatus" role="status"></div>
+  <label class="hidden" for="scenarioProgress">시나리오 진행 위치</label>
+  <input type="range" id="scenarioProgress" min="0" max="1000" step="1" value="0">
+  <div class="scenario-controls">
+    <button type="button" class="btn" id="scenarioPrev">이전 사건</button>
+    <button type="button" class="btn" id="scenarioPlay" aria-pressed="false">경로 재생</button>
+    <button type="button" class="btn" id="scenarioNext">다음 사건</button>
+    <button type="button" class="btn" id="scenarioOverview">전체 항로</button>
+  </div>
+  <div class="scenario-section-title"><span>사건 타임라인</span><span>선택하면 해당 위치로 이동</span></div>
+  <div id="scenarioEvents"></div>
+  <p id="scenarioFact"></p>
+</section>
 
 <div id="tourBar" class="panel hidden" role="region" aria-label="행성 학습 투어">
   <div id="narration" aria-live="polite"></div>
@@ -507,6 +581,7 @@ import { RGBShiftShader } from 'three/addons/shaders/RGBShiftShader.js';
 import { Lensflare, LensflareElement } from 'three/addons/objects/Lensflare.js';
 import { createSolarEffects } from './solar-effects.js';
 import { QUALITY_PROFILES, createPerformanceManager } from './performance-manager.js';
+import { createScenarioMode } from './scenario-mode.js';
 
 /* ============================================================
    CONFIG — 모든 상수는 여기에
@@ -752,6 +827,7 @@ const ui = {
   cometMission: $('cometMission'), cometSourceLink: $('cometSourceLink'),
   cometOrbitView: $('cometOrbitView'), cometFollowView: $('cometFollowView'),
   cometInfoToggle: $('cometInfoToggle'),
+  scenarioNav: $('scenarioNavButton'), scenarioPanel: $('scenarioPanel'),
   tourBar: $('tourBar'), narration: $('narration'), tourStep: $('tourStep'),
   tourPrev: $('tourPrev'), tourPause: $('tourPause'),
   tourNext: $('tourNext'), tourStop: $('tourStop'),
@@ -770,10 +846,11 @@ const CATEGORY_META = {
 const SCALE_COPY = {
   illustrative: ['연출 축척', '행성과 거리를 관찰하기 쉽게 확대·압축했습니다.'],
   actual: ['실제 크기 비율', '태양과 행성의 지름 비율을 그대로 비교합니다.'],
-  comet: ['혜성 공전 모형', '거리·크기는 압축하고 꼬리 방향과 궤도 형태를 강조했습니다.']
+  comet: ['혜성 공전 모형', '거리·크기는 압축하고 꼬리 방향과 궤도 형태를 강조했습니다.'],
+  scenario: ['시나리오 압축 축척', '작품 속 거리와 사건 시간을 한 장면으로 압축했습니다.']
 };
-function setScaleMode(mode){
-  const copy = SCALE_COPY[mode];
+function setScaleMode(mode, overrideCopy = null){
+  const copy = overrideCopy || SCALE_COPY[mode];
   ui.scaleBadge.dataset.mode = mode;
   ui.scaleMode.textContent = copy[0];
   ui.scaleDesc.textContent = copy[1];
@@ -2295,6 +2372,33 @@ function flyOverview(){
   startFlight(new THREE.Vector3(...CONFIG.cameraPos), new THREE.Vector3(0, 0, 0), {});
 }
 
+let scenarioSavedTimeScale = CONFIG.defaultSpeed;
+const scenarioMode = createScenarioMode({
+  scene, camera, controls, makeLabel, reduceMotion,
+  getBodyPosition:key => {
+    const body = planetBodies.find(candidate => candidate.data.key === key);
+    return body ? bodyWorldPos(body, new THREE.Vector3()) : new THREE.Vector3();
+  },
+  startFlight,
+  setFollowBody:body => {
+    followBody = body;
+    bodyWorldPos(body, lastBodyPos);
+  },
+  clearFollowBody:() => { followBody = null; },
+  setScaleMode,
+  onEnter:() => {
+    if (cmp.active) exitCmp(false);
+    if (tour.active) exitTour(false);
+    if (meteorMode.active) exitMeteorMode(false);
+    if (cometMode.active) exitCometMode(false);
+    hideInfo();
+    scenarioSavedTimeScale = timeScale;
+    setTimeScale(0);
+    navButtons.forEach(button => button.setAttribute('aria-current', 'false'));
+  },
+  onExit:() => setTimeScale(scenarioSavedTimeScale)
+});
+
 /* ============================================================
    정보 패널
 ============================================================ */
@@ -2508,6 +2612,7 @@ function enterMeteorMode(){
   if (cmp.active) exitCmp(false);
   if (tour.active) exitTour(false);
   if (cometMode.active) exitCometMode(false);
+  if (scenarioMode.active) scenarioMode.exit(false);
   hideInfo();
   if (activeQuality.id !== 'saver') ensureEarthTextures();
   meteorMode.active = true;
@@ -2638,6 +2743,7 @@ function enterCometMode(){
   if (cmp.active) exitCmp(false);
   if (tour.active) exitTour(false);
   if (meteorMode.active) exitMeteorMode(false);
+  if (scenarioMode.active) scenarioMode.exit(false);
   hideInfo();
   cometMode.active = true;
   ui.cometPanel.classList.remove('hidden');
@@ -2700,6 +2806,7 @@ function startTour(){
   if (cmp.active) exitCmp(false);
   if (meteorMode.active) exitMeteorMode(false);
   if (cometMode.active) exitCometMode(false);
+  if (scenarioMode.active) scenarioMode.exit(false);
   tour.active = true; tour.paused = false; tour.timer = 0;
   ui.tourPause.textContent = '일시정지';
   ui.tourPause.setAttribute('aria-pressed', 'false');
@@ -2744,6 +2851,7 @@ function enterCmp(){
   if (tour.active) exitTour(false);
   if (meteorMode.active) exitMeteorMode(false);
   if (cometMode.active) exitCometMode(false);
+  if (scenarioMode.active) scenarioMode.exit(false);
   cmp.active = true;
   cmp.savedCam.copy(camera.position);
   cmp.savedTarget.copy(controls.target);
@@ -2818,6 +2926,7 @@ function selectBody(index){
   if (tour.active) exitTour(false);
   if (meteorMode.active) exitMeteorMode(false);
   if (cometMode.active) exitCometMode(false);
+  if (scenarioMode.active) scenarioMode.exit(false);
   showInfo(body);
   if (!cmp.active) flyToBody(body);
 }
@@ -2829,6 +2938,7 @@ function resetView(){
   if (cmp.active) exitCmp(false);
   if (meteorMode.active) exitMeteorMode(false);
   if (cometMode.active) exitCometMode(false);
+  if (scenarioMode.active) scenarioMode.exit(false);
   followBody = null;
   hideInfo();
   navButtons.forEach(button => button.setAttribute('aria-current', 'false'));
@@ -2852,6 +2962,7 @@ window.addEventListener('keydown', e => {
     else if (cmp.active) exitCmp();
     else if (meteorMode.active) exitMeteorMode();
     else if (cometMode.active) exitCometMode();
+    else if (scenarioMode.active) scenarioMode.exit();
     else hideInfo();
   }
 });
@@ -2884,6 +2995,8 @@ renderer.domElement.addEventListener('pointerup', e => {
     return;
   }
   if (meteorMode.active) exitMeteorMode(false);
+  if (cometMode.active) exitCometMode(false);
+  if (scenarioMode.active) scenarioMode.exit(false);
   showInfo(b);
   flyToBody(b);
 });
@@ -2912,16 +3025,18 @@ function updateHover(dt){
 }
 
 function updateOpticalFocus(dt){
-  const nearSun = !cmp.active && !cometMode.active && (
+  const nearSun = !cmp.active && !cometMode.active && !scenarioMode.active && (
     followBody === sunBody || flight.body === sunBody || camera.position.length() < 42
   );
-  const baseBloom = reduceMotion ? 0.42 : cmp.active ? 0.20 : cometMode.active ? 0.66 : nearSun ? 0.34 : 0.76;
+  const baseBloom = reduceMotion ? 0.42 : cmp.active ? 0.20
+    : cometMode.active ? 0.66 : scenarioMode.active ? 0.58 : nearSun ? 0.34 : 0.76;
   const targetBloom = baseBloom * activeQuality.bloomScale;
   bloomPass.strength += (targetBloom - bloomPass.strength) * Math.min(1, dt * 3.5);
-  lensflare.visible = !cmp.active && !cometMode.active && !nearSun;
+  lensflare.visible = !cmp.active && !cometMode.active && !scenarioMode.active && !nearSun;
   corona.material.opacity = nearSun ? 0.20 : 0.40;
   solarEffects.setIntensity(
-    cmp.active ? 0.0 : cometMode.active ? 0.58 : nearSun ? 1.08 : reduceMotion ? 0.42 : 0.65
+    cmp.active ? 0.0 : cometMode.active ? 0.58 : scenarioMode.active ? 0.32
+      : nearSun ? 1.08 : reduceMotion ? 0.42 : 0.65
   );
   if (!reduceMotion){
     filmPass.enabled = activeQuality.film && !cmp.active;
@@ -3044,6 +3159,7 @@ function tick(timestamp){
     for (const m of cmp.meshes) m.rotation.y += dt * 0.25;
   }
 
+  scenarioMode.update(dt);
   updateFlight(dt);
   updateFollow();
 
