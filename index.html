@@ -30,6 +30,8 @@
   .label{position:absolute;color:#dfe7f5;font-size:12px;
     letter-spacing:.16em;white-space:nowrap;pointer-events:none;opacity:.85;
     text-shadow:0 1px 6px rgba(0,0,0,.95)}
+  .moon-label{color:#b9dcff;font-size:10px;letter-spacing:.08em;padding:2px 6px;border-radius:999px;
+    background:rgba(7,14,26,.68);border:1px solid rgba(122,184,255,.22)}
   .zone-label{color:#8aefb9;font-size:10px;letter-spacing:.08em}
   .cmp-label{position:absolute;text-align:center;pointer-events:none;
     font-size:12px;color:#dfe7f5;white-space:nowrap;text-shadow:0 1px 6px rgba(0,0,0,.95);line-height:1.5}
@@ -41,44 +43,65 @@
 
   .panel{position:fixed;z-index:10;background:var(--panel);border:1px solid var(--border);
     border-radius:14px;backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
-    box-shadow:0 10px 40px rgba(0,0,0,.45)}
+    box-shadow:0 10px 40px rgba(0,0,0,.45);
+    transition:opacity .26s cubic-bezier(.2,.8,.2,1),transform .28s cubic-bezier(.2,.8,.2,1),visibility .26s}
   .hidden{display:none!important}
-  button:focus-visible,input:focus-visible{outline:2px solid #b9dcff;outline-offset:3px}
+  #infoPanel.hidden,#meteorPanel.hidden,#cometPanel.hidden,#scenarioPanel.hidden{
+    display:block!important;opacity:0;visibility:hidden;pointer-events:none;
+    transform:translateY(-50%) translateX(18px)}
+  #tourBar.hidden,#followHud.hidden{
+    display:flex!important;opacity:0;visibility:hidden;pointer-events:none;
+    transform:translateX(-50%) translateY(14px)}
+  button:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid #b9dcff;outline-offset:3px}
   button:disabled{cursor:not-allowed}
 
   /* title */
-  #title{position:fixed;top:20px;left:22px;z-index:10;pointer-events:none;
+  #title{position:fixed;top:18px;left:22px;z-index:10;pointer-events:none;
     animation:titleIn 1.6s cubic-bezier(.2,.8,.2,1) .4s both}
-  #title h1{font-size:22px;font-weight:700;letter-spacing:.22em;
+  #title h1{font-size:21px;font-weight:700;letter-spacing:.2em;
     text-shadow:0 2px 18px rgba(122,184,255,.35)}
-  #title p{margin-top:5px;font-size:12px;color:var(--dim);letter-spacing:.14em}
+  #title p{margin-top:4px;font-size:11.5px;color:var(--dim);letter-spacing:.12em}
   @keyframes titleIn{from{opacity:0;transform:translateY(-12px)}to{opacity:1;transform:none}}
 
   /* control panel */
-  #controls{left:18px;bottom:18px;width:260px;padding:16px 16px 14px}
+  #controls{left:18px;bottom:18px;width:274px;padding:13px 15px 12px}
+  .controls-header{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:8px}
+  .controls-title{display:flex;align-items:center;gap:7px;font-size:12px;color:var(--dim);letter-spacing:.06em}
+  #btnPlayPause{width:26px;height:26px;border-radius:7px;border:1px solid var(--border);
+    background:rgba(255,255,255,.07);color:var(--text);font-size:11px;cursor:pointer;display:grid;place-items:center;transition:.18s}
+  #btnPlayPause:hover{background:rgba(122,184,255,.18);border-color:rgba(122,184,255,.45)}
+  .controls-header-right{display:flex;align-items:center;gap:7px}
+  #speedLabel{font-size:12px;color:var(--accent);font-weight:600;font-variant-numeric:tabular-nums}
+  #controlsToggle{background:rgba(255,255,255,.06);border:1px solid var(--border);color:var(--dim);
+    border-radius:7px;padding:3px 7px;font:inherit;font-size:10.5px;cursor:pointer;transition:.18s}
+  #controlsToggle:hover{color:var(--text);background:rgba(255,255,255,.12)}
+  #controls.collapsed #controlsBody{display:none}
+  #controls.collapsed{padding-bottom:11px;width:236px}
+  #controls.collapsed .controls-header{margin-bottom:0}
   #controls .row{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px}
-  #controls .row label{font-size:12.5px;color:var(--dim);letter-spacing:.06em}
-  #speedLabel{font-size:12.5px;color:var(--accent);font-weight:600}
-  input[type=range]{width:100%;accent-color:var(--accent);cursor:pointer;margin-bottom:10px}
-  .toggle{display:flex;align-items:center;gap:8px;font-size:13px;margin:7px 0;cursor:pointer;color:var(--text)}
+  #controls .row label{font-size:12px;color:var(--dim);letter-spacing:.05em}
+  input[type=range]{width:100%;accent-color:var(--accent);cursor:pointer;margin-bottom:8px}
+  .toggle-grid{display:grid;grid-template-columns:1fr 1fr;gap:5px 8px;margin:6px 0 8px;
+    padding:7px 8px;border-radius:10px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.05)}
+  .toggle{display:flex;align-items:center;gap:6px;font-size:11.5px;cursor:pointer;color:var(--text);white-space:nowrap}
   .toggle input{accent-color:var(--accent);cursor:pointer}
-  .btnrow{display:flex;gap:6px;margin-top:11px}
+  .btnrow{display:flex;gap:6px;margin-top:9px}
   .btn{flex:1;background:rgba(255,255,255,.07);border:1px solid var(--border);color:var(--text);
-    padding:8px 6px;border-radius:9px;font-size:12.5px;cursor:pointer;transition:.18s;
+    padding:7px 6px;border-radius:9px;font-size:12px;cursor:pointer;transition:.18s;
     font-family:inherit;letter-spacing:.02em;white-space:nowrap}
   .btn:hover{background:rgba(122,184,255,.16);border-color:rgba(122,184,255,.45)}
   .btn.active{background:rgba(255,178,87,.18);border-color:rgba(255,178,87,.55);color:#ffd9a8}
-  .speed-presets{display:grid;grid-template-columns:repeat(4,1fr);gap:5px;margin:1px 0 10px}
-  .speed-presets .btn{padding:5px 3px;font-size:11px}
-  #controls .quality-row{margin:10px 0 3px;padding-top:9px;border-top:1px solid rgba(255,255,255,.07)}
-  #qualitySelect{min-width:92px;background:#151d2d;border:1px solid var(--border);color:var(--text);
-    border-radius:7px;padding:5px 7px;font:inherit;font-size:11.5px;cursor:pointer}
-  #qualityStatus{font-size:10.5px;color:var(--dim);text-align:right;font-variant-numeric:tabular-nums}
-  #simTime{font-size:11px;color:var(--dim);margin-top:8px;text-align:right;font-variant-numeric:tabular-nums}
+  .speed-presets{display:grid;grid-template-columns:repeat(4,1fr);gap:5px;margin:1px 0 8px}
+  .speed-presets .btn{padding:4px 3px;font-size:11px}
+  #controls .quality-row{margin:7px 0 2px;padding-top:7px;border-top:1px solid rgba(255,255,255,.07)}
+  #qualitySelect{min-width:90px;background:#151d2d;border:1px solid var(--border);color:var(--text);
+    border-radius:7px;padding:4px 7px;font:inherit;font-size:11px;cursor:pointer}
+  #qualityStatus{font-size:10px;color:var(--dim);text-align:right;font-variant-numeric:tabular-nums}
+  #simTime{font-size:10.5px;color:var(--dim);margin-top:7px;text-align:right;font-variant-numeric:tabular-nums}
 
   /* learning context */
   #scaleBadge{right:18px;top:18px;display:flex;align-items:center;gap:10px;padding:10px 13px;
-    max-width:300px;box-shadow:0 8px 28px rgba(0,0,0,.32)}
+    max-width:290px;box-shadow:0 8px 28px rgba(0,0,0,.32)}
   #scaleBadge .scale-dot{width:9px;height:9px;flex:0 0 auto;border-radius:50%;background:#ffb257;
     box-shadow:0 0 14px rgba(255,178,87,.75)}
   #scaleBadge strong{display:block;font-size:12px;letter-spacing:.08em;color:#ffd8a6}
@@ -88,24 +111,29 @@
   #scaleBadge[data-mode="scenario"] .scale-dot{background:#b899ff;box-shadow:0 0 14px rgba(184,153,255,.8)}
   #scaleBadge[data-mode="scenario"] strong{color:#d9c8ff}
 
-  #planetNav{top:82px;left:50%;transform:translateX(-50%);display:flex;gap:4px;padding:5px;
-    max-width:calc(100% - 430px);overflow-x:auto;scrollbar-width:none}
+  #planetNav{top:18px;left:50%;transform:translateX(-50%);display:flex;align-items:center;gap:3px;padding:5px 7px;
+    max-width:calc(100% - 540px);overflow-x:auto;scrollbar-width:none}
   #planetNav::-webkit-scrollbar{display:none}
-  #planetNav button{border:1px solid transparent;background:transparent;color:var(--dim);font:inherit;
-    font-size:11.5px;white-space:nowrap;padding:6px 9px;border-radius:999px;cursor:pointer;transition:.18s}
+  .nav-divider{width:1px;height:18px;background:rgba(255,255,255,.14);margin:0 4px;flex:0 0 auto}
+  #planetNav button{display:inline-flex;align-items:center;gap:5px;border:1px solid transparent;
+    background:transparent;color:var(--dim);font:inherit;font-size:11.5px;white-space:nowrap;
+    padding:6px 9px;border-radius:999px;cursor:pointer;transition:.18s}
+  #planetNav button .nav-dot{width:6px;height:6px;border-radius:50%;opacity:.75;transition:.18s}
   #planetNav button:hover{color:var(--text);background:rgba(255,255,255,.07)}
+  #planetNav button:hover .nav-dot{opacity:1;transform:scale(1.18)}
   #planetNav button[aria-current="true"]{color:#fff;border-color:rgba(122,184,255,.5);
-    background:rgba(122,184,255,.16)}
+    background:rgba(122,184,255,.16);box-shadow:0 0 14px rgba(122,184,255,.16)}
+  #planetNav button[aria-current="true"] .nav-dot{opacity:1;box-shadow:0 0 8px currentColor}
   #meteorNavButton{color:#ffd39f!important}
-  #meteorNavButton::before{content:'✦';margin-right:4px;color:#ffad5c}
+  #meteorNavButton::before{content:'✦';margin-right:2px;color:#ffad5c}
   #meteorNavButton[aria-current="true"]{border-color:rgba(255,173,92,.62)!important;
     background:rgba(255,150,70,.18)!important;color:#fff4e5!important}
   #cometNavButton{color:#bcecff!important}
-  #cometNavButton::before{content:'☄';margin-right:4px;color:#7bdcff}
+  #cometNavButton::before{content:'☄';margin-right:2px;color:#7bdcff}
   #cometNavButton[aria-current="true"]{border-color:rgba(92,213,255,.62)!important;
     background:rgba(62,174,218,.18)!important;color:#effbff!important}
   #scenarioNavButton{color:#d9c8ff!important}
-  #scenarioNavButton::before{content:'➤';margin-right:4px;color:#b899ff}
+  #scenarioNavButton::before{content:'➤';margin-right:2px;color:#b899ff}
   #scenarioNavButton[aria-current="true"]{border-color:rgba(184,153,255,.65)!important;
     background:rgba(139,101,225,.2)!important;color:#f4eeff!important}
 
@@ -117,8 +145,20 @@
   .legend-dot{width:7px;height:7px;border-radius:50%;box-shadow:0 0 8px currentColor}
   .legend-rocky{color:#e4ad75}.legend-gas{color:#e5c692}.legend-ice{color:#7fd7e8}.legend-zone{color:#62d99b}
 
+  /* camera follow HUD badge */
+  #followHud{left:50%;bottom:22px;transform:translateX(-50%);display:flex;align-items:center;gap:10px;
+    padding:8px 12px 8px 14px;border-radius:999px;border-color:rgba(122,184,255,.32);
+    background:rgba(8,15,28,.78)}
+  body.tour-active #followHud{bottom:136px}
+  .follow-status{display:flex;align-items:center;gap:7px;font-size:12px;color:#dbeafe;white-space:nowrap}
+  .follow-dot{width:8px;height:8px;border-radius:50%;background:#60a5fa;
+    box-shadow:0 0 10px #60a5fa;animation:followPulse 1.8s ease-in-out infinite}
+  @keyframes followPulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.45;transform:scale(.82)}}
+  .follow-actions{display:flex;align-items:center;gap:5px}
+  .follow-actions .btn{flex:0 0 auto;padding:5px 10px;border-radius:999px;font-size:11px}
+
   /* info panel */
-  #infoPanel{right:18px;top:50%;transform:translateY(-50%);width:330px;max-height:calc(100vh - 220px);
+  #infoPanel{right:18px;top:50%;transform:translateY(-50%);width:334px;max-height:calc(100vh - 180px);
     overflow:auto;padding:20px 20px 18px}
   #infoPanel,#meteorPanel,#cometPanel,#scenarioPanel{scrollbar-width:thin;scrollbar-color:rgba(125,178,213,.45) transparent}
   #infoPanel::-webkit-scrollbar,#meteorPanel::-webkit-scrollbar,#cometPanel::-webkit-scrollbar,#scenarioPanel::-webkit-scrollbar{width:6px}
@@ -238,7 +278,10 @@
     background:rgba(67,155,198,.07);font-size:10.5px;line-height:1.55;color:#c8d7e5}
   .comet-mission span{display:block;margin-bottom:2px;color:#74cce9;font-size:9px;letter-spacing:.14em}
   .comet-terms{display:grid;grid-template-columns:repeat(4,1fr);gap:5px;margin-top:12px}
-  .comet-term{padding:7px 4px;border-radius:8px;background:rgba(75,151,194,.08);text-align:center}
+  .comet-term{padding:7px 4px;border-radius:8px;border:1px solid rgba(103,215,255,.14);
+    background:rgba(75,151,194,.08);text-align:center;font:inherit;cursor:pointer;transition:.18s}
+  .comet-term:hover,.comet-term[aria-pressed="true"]{border-color:rgba(103,215,255,.65);
+    background:rgba(62,174,218,.22);transform:translateY(-1px)}
   .comet-term b{display:block;color:#b9edff;font-size:9.5px}
   .comet-term span{display:block;color:#7f8ca2;font-size:8px;margin-top:2px}
   .comet-source{margin-top:11px;font-size:9px;line-height:1.55;color:#738199}
@@ -248,6 +291,7 @@
   .comet-label.sunward{color:#ffd39f}.comet-label.dust{color:#ffd6a1}.comet-label.ion{color:#91e8ff}
   #cometInfoToggle{display:none;right:14px;bottom:14px;padding:9px 14px;border:1px solid rgba(92,213,255,.5);
     border-radius:999px;background:rgba(9,28,45,.86);color:#dff8ff;font:inherit;font-size:11px;cursor:pointer}
+
   /* cinematic spacecraft scenarios */
   #scenarioPanel{right:18px;top:50%;transform:translateY(-50%);width:405px;
     max-height:calc(100vh - 145px);overflow:auto;padding:20px}
@@ -268,7 +312,16 @@
   #scenarioStatus span{display:block;color:#bfa4ff;font-size:9px;letter-spacing:.17em}
   #scenarioStatus b{display:block;margin-top:4px;color:#f4f0fb;font-size:12px}
   #scenarioStatus p{margin-top:6px;color:#cbd3e1;font-size:11.5px;line-height:1.55}
-  #scenarioProgress{width:100%;margin:12px 0 7px;accent-color:#b899ff}
+  .scenario-timeline-wrap{position:relative;margin:13px 0 9px;padding-bottom:12px}
+  #scenarioProgress{width:100%;margin:0;accent-color:#b899ff}
+  .scenario-ticks{position:relative;height:10px;margin:2px 6px 0}
+  .scenario-tick{position:absolute;top:0;transform:translateX(-50%);width:8px;height:8px;
+    border-radius:50%;border:1px solid rgba(184,153,255,.55);background:#141b2d;
+    cursor:pointer;padding:0;transition:.18s}
+  .scenario-tick:hover{transform:translateX(-50%) scale(1.35);background:#b899ff}
+  .scenario-tick.completed{background:rgba(116,220,176,.75);border-color:#8ee7be}
+  .scenario-tick[aria-current="true"]{background:#d9c8ff;border-color:#fff;
+    box-shadow:0 0 8px rgba(184,153,255,.95);transform:translateX(-50%) scale(1.3)}
   .scenario-controls{display:grid;grid-template-columns:1fr 1.25fr 1fr 1.25fr;gap:5px;margin-bottom:12px}
   .scenario-controls .btn{padding:7px 4px;font-size:10.5px}
   .scenario-section-title{display:flex;align-items:center;justify-content:space-between;margin:8px 0 7px;
@@ -294,14 +347,14 @@
 
   /* tour bar */
   #tourBar{left:50%;bottom:24px;transform:translateX(-50%);max-width:620px;width:calc(100% - 40px);
-    padding:15px 20px 13px;text-align:center}
+    padding:15px 20px 13px;text-align:center;flex-direction:column;align-items:center}
   #narration{font-size:15px;line-height:1.7;min-height:3.2em;color:#eef2fa}
   .tour-buttons{display:flex;gap:7px;justify-content:center;margin-top:10px}
   .tour-buttons .btn{flex:0 0 auto;padding:7px 16px}
   #tourStep{font-size:11.5px;color:var(--dim);letter-spacing:.2em;margin-top:7px}
 
   /* hint toast */
-  #toast{left:50%;bottom:96px;transform:translateX(-50%);padding:10px 20px;font-size:13px;
+  #toast{left:50%;bottom:84px;transform:translateX(-50%);padding:10px 20px;font-size:13px;
     color:var(--dim);letter-spacing:.04em;transition:opacity 1.2s;white-space:nowrap;
     border-radius:999px}
   #toast.fade{opacity:0}
@@ -318,17 +371,22 @@
   @keyframes introOut{to{opacity:0;visibility:hidden}}
   @keyframes introPulse{0%,100%{text-shadow:0 0 24px rgba(255,190,110,.25)}50%{text-shadow:0 0 52px rgba(255,190,110,.6)}}
 
+  @media (max-width:1100px){
+    #planetNav{top:74px;max-width:calc(100% - 36px)}
+  }
   @media (max-width:900px){
     #title{top:14px;left:14px}#title h1{font-size:17px;letter-spacing:.12em}#title p{font-size:10px;letter-spacing:.06em}
     #scaleBadge{top:12px;right:12px;max-width:185px;padding:8px 10px}#scaleBadge span:last-child{display:none}
     #planetNav{top:64px;left:12px;right:12px;transform:none;max-width:none}
     #lessonLegend{top:110px;right:12px;width:auto;padding:7px 9px;display:flex;gap:9px}
     #lessonLegend strong{display:none}.legend-item{margin:0;font-size:9.5px}
-    #controls{left:12px;right:12px;bottom:12px;width:auto;padding:12px 14px}
+    #controls,#controls.collapsed{left:12px;right:12px;bottom:12px;width:auto;padding:12px 14px}
     #infoPanel,#meteorPanel,#cometPanel,#scenarioPanel{left:12px;right:12px;top:auto;bottom:12px;transform:none;width:auto;max-height:62vh}
+    #infoPanel.hidden,#meteorPanel.hidden,#cometPanel.hidden,#scenarioPanel.hidden{transform:translateY(18px)}
     #cometPanel{max-height:55vh}
     body.tour-active #infoPanel{bottom:158px;max-height:42vh}
     #tourBar{bottom:12px;width:calc(100% - 24px);padding:12px 14px}
+    #followHud{top:112px;bottom:auto}
     #toast{bottom:192px;max-width:calc(100% - 24px);white-space:normal;text-align:center}
     body.info-open #controls,body.meteor-open #controls,body.comet-open #controls,
     body.scenario-open #controls,body.tour-active #controls{opacity:0;pointer-events:none}
@@ -336,6 +394,7 @@
   @media (max-width:560px){
     #title p{display:none}#scaleBadge{max-width:138px}#planetNav{top:54px}
     #planetNav{gap:1px;padding:4px}#planetNav button{font-size:10.5px;padding:5px 6px}
+    #planetNav button .nav-dot{display:none}
     #lessonLegend{top:99px;left:12px;right:12px;width:auto;justify-content:space-between;gap:4px}
     #lessonLegend .legend-item{font-size:9px;gap:4px}.legend-dot{width:7px;height:7px}
     #controls .btnrow{display:grid;grid-template-columns:repeat(3,1fr)}
@@ -348,8 +407,8 @@
   }
   @media (max-height:620px) and (orientation:landscape){
     #lessonLegend,#title p{display:none}#planetNav{top:12px;max-width:55%}
-    #controls{width:224px;right:auto;max-height:76vh;overflow:auto}
-    #infoPanel,#meteorPanel,#cometPanel,#scenarioPanel{left:auto;right:12px;top:62px;bottom:12px;width:360px;max-height:none}
+    #controls{width:240px;right:auto;max-height:76vh;overflow:auto}
+    #infoPanel,#meteorPanel,#cometPanel,#scenarioPanel{left:auto;right:12px;top:62px;bottom:12px;width:360px;max-height:none;transform:none}
     body.tour-active #infoPanel{display:none!important}
   }
   @media (prefers-reduced-motion:reduce){
@@ -371,12 +430,18 @@
   <div><strong id="scaleMode">연출 축척</strong><span id="scaleDesc">행성과 거리를 관찰하기 쉽게 확대·압축했습니다.</span></div>
 </div>
 
-<nav id="planetNav" class="panel" aria-label="천체 빠른 탐색">
-  <button type="button" data-body-index="0">태양</button><button type="button" data-body-index="1">수성</button>
-  <button type="button" data-body-index="2">금성</button><button type="button" data-body-index="3">지구</button>
-  <button type="button" data-body-index="4">화성</button><button type="button" data-body-index="5">목성</button>
-  <button type="button" data-body-index="6">토성</button><button type="button" data-body-index="7">천왕성</button>
-  <button type="button" data-body-index="8">해왕성</button><button type="button" id="meteorNavButton" aria-current="false">유성우</button>
+<nav id="planetNav" class="panel" aria-label="천체 빠른 탐색 및 특별 관측 모드">
+  <button type="button" data-body-index="0" title="태양 (숫자키 1)"><span class="nav-dot" style="background:#ffd38d;color:#ffd38d"></span>태양</button>
+  <button type="button" data-body-index="1" title="수성 (숫자키 2)"><span class="nav-dot" style="background:#e4ad75;color:#e4ad75"></span>수성</button>
+  <button type="button" data-body-index="2" title="금성 (숫자키 3)"><span class="nav-dot" style="background:#e4ad75;color:#e4ad75"></span>금성</button>
+  <button type="button" data-body-index="3" title="지구 (숫자키 4)"><span class="nav-dot" style="background:#62d99b;color:#62d99b"></span>지구</button>
+  <button type="button" data-body-index="4" title="화성 (숫자키 5)"><span class="nav-dot" style="background:#e4ad75;color:#e4ad75"></span>화성</button>
+  <button type="button" data-body-index="5" title="목성 (숫자키 6)"><span class="nav-dot" style="background:#e5c692;color:#e5c692"></span>목성</button>
+  <button type="button" data-body-index="6" title="토성 (숫자키 7)"><span class="nav-dot" style="background:#e5c692;color:#e5c692"></span>토성</button>
+  <button type="button" data-body-index="7" title="천왕성 (숫자키 8)"><span class="nav-dot" style="background:#7fd7e8;color:#7fd7e8"></span>천왕성</button>
+  <button type="button" data-body-index="8" title="해왕성 (숫자키 9)"><span class="nav-dot" style="background:#7fd7e8;color:#7fd7e8"></span>해왕성</button>
+  <span class="nav-divider" aria-hidden="true"></span>
+  <button type="button" id="meteorNavButton" aria-current="false">유성우</button>
   <button type="button" id="cometNavButton" aria-current="false">혜성</button>
   <button type="button" id="scenarioNavButton" aria-current="false">영화 항로</button>
 </nav>
@@ -390,32 +455,57 @@
 </aside>
 
 <div id="controls" class="panel">
-  <div class="row"><label for="speed">시간 속도</label><span id="speedLabel">10배속</span></div>
-  <input type="range" id="speed" min="0" max="500" step="1" value="10" aria-describedby="simTime">
-  <div class="speed-presets" aria-label="시간 속도 프리셋">
-    <button type="button" class="btn" data-speed="0">정지</button><button type="button" class="btn" data-speed="1">1배</button>
-    <button type="button" class="btn active" data-speed="10">10배</button><button type="button" class="btn" data-speed="100">100배</button>
+  <div class="controls-header">
+    <div class="controls-title">
+      <button type="button" id="btnPlayPause" aria-label="시뮬레이션 일시정지/재생" title="일시정지 / 재생">⏸</button>
+      <label for="speed">시간 속도</label>
+    </div>
+    <div class="controls-header-right">
+      <span id="speedLabel">10배속</span>
+      <button type="button" id="controlsToggle" aria-expanded="true" aria-controls="controlsBody" title="컨트롤 패널 접기/펼치기">접기</button>
+    </div>
   </div>
-  <label class="toggle"><input type="checkbox" id="orbitToggle" checked> 궤도 표시</label>
-  <label class="toggle"><input type="checkbox" id="labelToggle" checked> 이름 라벨</label>
-  <label class="toggle"><input type="checkbox" id="zoneToggle" checked> 생명가능지대</label>
-  <label class="toggle"><input type="checkbox" id="categoryToggle" checked> 행성 분류 색상</label>
-  <div class="row quality-row">
-    <label for="qualitySelect">그래픽 품질</label>
-    <select id="qualitySelect" aria-describedby="qualityStatus">
-      <option value="auto">자동</option>
-      <option value="high">고화질</option>
-      <option value="balanced">균형</option>
-      <option value="saver">절전</option>
-    </select>
+  <div id="controlsBody">
+    <input type="range" id="speed" min="0" max="500" step="1" value="10" aria-describedby="simTime">
+    <div class="speed-presets" aria-label="시간 속도 프리셋">
+      <button type="button" class="btn" data-speed="0">정지</button><button type="button" class="btn" data-speed="1">1배</button>
+      <button type="button" class="btn active" data-speed="10">10배</button><button type="button" class="btn" data-speed="100">100배</button>
+    </div>
+    <div class="toggle-grid" role="group" aria-label="화면 표시 레이어">
+      <label class="toggle"><input type="checkbox" id="orbitToggle" checked> 궤도 표시</label>
+      <label class="toggle"><input type="checkbox" id="labelToggle" checked> 이름 라벨</label>
+      <label class="toggle"><input type="checkbox" id="zoneToggle" checked> 생명가능지대</label>
+      <label class="toggle"><input type="checkbox" id="categoryToggle" checked> 분류 색상</label>
+    </div>
+    <div class="row quality-row">
+      <label for="qualitySelect">그래픽 품질</label>
+      <select id="qualitySelect" aria-describedby="qualityStatus">
+        <option value="auto">자동</option>
+        <option value="high">고화질</option>
+        <option value="balanced">균형</option>
+        <option value="saver">절전</option>
+      </select>
+    </div>
+    <div id="qualityStatus" role="status" aria-live="polite">자동 · 균형 · 측정 중</div>
+    <div class="btnrow">
+      <button type="button" class="btn" id="btnOverview">전체 보기</button>
+      <button type="button" class="btn" id="btnTour" aria-pressed="false">행성 투어</button>
+      <button type="button" class="btn" id="btnCompare" aria-pressed="false">크기 비교</button>
+    </div>
+    <div id="simTime">경과 0일 · 숫자키 1–9로 천체 선택</div>
   </div>
-  <div id="qualityStatus" role="status" aria-live="polite">자동 · 균형 · 측정 중</div>
-  <div class="btnrow">
-    <button type="button" class="btn" id="btnOverview">전체 보기</button>
-    <button type="button" class="btn" id="btnTour" aria-pressed="false">행성 투어</button>
-    <button type="button" class="btn" id="btnCompare" aria-pressed="false">크기 비교</button>
+</div>
+
+<div id="followHud" class="panel hidden" role="status" aria-live="polite" aria-hidden="true">
+  <div class="follow-status">
+    <span class="follow-dot" aria-hidden="true"></span>
+    <strong id="followTargetName">지구 추적 중</strong>
   </div>
-  <div id="simTime">경과 0일 · 숫자키 1–9로 천체 선택</div>
+  <div class="follow-actions">
+    <button type="button" class="btn" id="btnFollowClose">표면 근접</button>
+    <button type="button" class="btn hidden" id="btnFollowMoons">위성계 보기</button>
+    <button type="button" class="btn" id="btnFollowExit" title="추적 해제 (ESC)">해제</button>
+  </div>
 </div>
 
 <div id="infoPanel" class="panel hidden" role="region" aria-label="선택한 천체 정보" aria-live="polite" aria-hidden="true">
@@ -506,11 +596,12 @@
   </div>
   <p id="cometHighlight"></p>
   <p class="comet-mission"><span>EXPLORATION NOTE</span><b id="cometMission"></b></p>
-  <div class="comet-terms" aria-label="혜성 구조 용어">
-    <div class="comet-term"><b>핵</b><span>얼음·암석 본체</span></div>
-    <div class="comet-term"><b>코마</b><span>기체·먼지 대기</span></div>
-    <div class="comet-term"><b>먼지 꼬리</b><span>휘어진 반사광</span></div>
-    <div class="comet-term"><b>이온 꼬리</b><span>곧은 청색 기체</span></div>
+  <div class="meteor-section-title"><span>혜성 구조 포커스</span><span>클릭하면 3D 부위 조명</span></div>
+  <div class="comet-terms" role="group" aria-label="혜성 구조 용어 및 3D 포커스">
+    <button type="button" class="comet-term" data-comet-part="nucleus" aria-pressed="false"><b>핵</b><span>얼음·암석 본체</span></button>
+    <button type="button" class="comet-term" data-comet-part="coma" aria-pressed="false"><b>코마</b><span>기체·먼지 대기</span></button>
+    <button type="button" class="comet-term" data-comet-part="dust" aria-pressed="false"><b>먼지 꼬리</b><span>휘어진 반사광</span></button>
+    <button type="button" class="comet-term" data-comet-part="ion" aria-pressed="false"><b>이온 꼬리</b><span>곧은 청색 기체</span></button>
   </div>
   <p class="comet-source">혜성은 활동에 따라 모습이 크게 달라집니다. 일반 설명은
     <a href="https://science.nasa.gov/solar-system/comets/facts/" target="_blank" rel="noopener noreferrer">NASA 혜성 자료</a>, 선택한 혜성은
@@ -527,8 +618,11 @@
     <button type="button" class="scenario-tab" data-scenario="hailmary" role="tab" aria-selected="false">프로젝트 헤일메리</button>
   </div>
   <div id="scenarioStatus" role="status"></div>
-  <label class="hidden" for="scenarioProgress">시나리오 진행 위치</label>
-  <input type="range" id="scenarioProgress" min="0" max="1000" step="1" value="0">
+  <div class="scenario-timeline-wrap">
+    <label class="hidden" for="scenarioProgress">시나리오 진행 위치</label>
+    <input type="range" id="scenarioProgress" min="0" max="1000" step="1" value="0">
+    <div id="scenarioTimelineTicks" class="scenario-ticks" role="group" aria-label="사건 타임라인 마커"></div>
+  </div>
   <div class="scenario-controls">
     <button type="button" class="btn" id="scenarioPrev">이전 사건</button>
     <button type="button" class="btn" id="scenarioPlay" aria-pressed="false">경로 재생</button>
@@ -684,6 +778,7 @@ const PLANET_DATA = [
     eccentricity:0.04725744, orbitInclination:0.77263783,
     meanLongitude:313.23810451, longitudePerihelion:170.95427630, longitudeAscendingNode:74.01692503,
     rotationHours:-17.2, avgTempC:-195, moons:28, orbitRadius:94, size:2.5, tilt:97.8, seed:74,
+    ring: { inner: 3.15, outer: 4.15, uranus: true },
     fact1:'자전축이 약 98도 기울어져, 옆으로 누운 채 굴러가듯 자전합니다.',
     fact2:'1781년 윌리엄 허셜이 발견한 최초의 망원경 행성입니다.',
     narration:'옆으로 누워 자전하는 천왕성입니다. 옅은 청록빛 대기가 인상적입니다.' },
@@ -797,12 +892,16 @@ const $ = id => document.getElementById(id);
 const app = $('app');
 const ui = {
   speed: $('speed'), speedLabel: $('speedLabel'),
+  btnPlayPause: $('btnPlayPause'),
+  controlsPanel: $('controls'), controlsToggle: $('controlsToggle'),
   orbitToggle: $('orbitToggle'), labelToggle: $('labelToggle'),
   zoneToggle: $('zoneToggle'), categoryToggle: $('categoryToggle'),
   qualitySelect: $('qualitySelect'), qualityStatus: $('qualityStatus'),
   btnOverview: $('btnOverview'), btnTour: $('btnTour'), btnCompare: $('btnCompare'),
   scaleBadge: $('scaleBadge'), scaleMode: $('scaleMode'), scaleDesc: $('scaleDesc'),
   planetNav: $('planetNav'), lessonLegend: $('lessonLegend'), simTime: $('simTime'),
+  followHud: $('followHud'), followTargetName: $('followTargetName'),
+  btnFollowClose: $('btnFollowClose'), btnFollowMoons: $('btnFollowMoons'), btnFollowExit: $('btnFollowExit'),
   infoPanel: $('infoPanel'), infoClose: $('infoClose'),
   infoName: $('infoName'), infoEn: $('infoEn'), infoCategory: $('infoCategory'),
   infoSummary: $('infoSummary'), infoDiameter: $('infoDiameter'),
@@ -835,7 +934,14 @@ const ui = {
 };
 const navButtons = [...ui.planetNav.querySelectorAll('[data-body-index]')];
 const speedPresetButtons = [...document.querySelectorAll('[data-speed]')];
+const cometTermButtons = [...document.querySelectorAll('[data-comet-part]')];
 const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+let timeScale = CONFIG.defaultSpeed;
+let lastNonZeroSpeed = CONFIG.defaultSpeed;
+let worldTime = 0;
+let elapsedDays = 0;
+let lastTimeUi = 0;
+let hovered = null;
 
 const CATEGORY_META = {
   star:  { label:'별', color:'#ffd38d' },
@@ -908,18 +1014,61 @@ function smooth(a, b, x){
 }
 
 /* ============================================================
-   Renderer / Scene / Camera / Post-processing
+   Renderer / Scene / Camera / Post-processing (MSAA + Space IBL)
 ============================================================ */
-const renderer = new THREE.WebGLRenderer({ antialias: true });
-renderer.setPixelRatio(Math.min(devicePixelRatio, 1.25));
+const renderer = new THREE.WebGLRenderer({ antialias: true, powerPreference: 'high-performance' });
+renderer.setPixelRatio(Math.min(devicePixelRatio, 1.5));
 renderer.setSize(innerWidth, innerHeight);
 renderer.toneMapping = THREE.ACESFilmicToneMapping;
-renderer.toneMappingExposure = 1.05;
+renderer.toneMappingExposure = 1.08;
 renderer.setClearColor(CONFIG.bgColor, 1);
 app.appendChild(renderer.domElement);
 renderer.domElement.setAttribute('aria-hidden', 'true');
 
 const scene = new THREE.Scene();
+
+// 절차적 심우주 IBL 환경맵 (PMREMGenerator) — 금속 우주선·행성 PBR 반사광 및 스페큘러 하이라이트 생성
+(function setupSpaceEnvironment(){
+  const W = 512, H = 256;
+  const cv = document.createElement('canvas'); cv.width = W; cv.height = H;
+  const ctx = cv.getContext('2d');
+  const bg = ctx.createLinearGradient(0, 0, 0, H);
+  bg.addColorStop(0.0, '#0b1326');
+  bg.addColorStop(0.45, '#162644');
+  bg.addColorStop(0.50, '#27426e');
+  bg.addColorStop(0.55, '#182848');
+  bg.addColorStop(1.0, '#080d1a');
+  ctx.fillStyle = bg;
+  ctx.fillRect(0, 0, W, H);
+
+  // 태양 방향 따뜻한 키 하이라이트
+  const sunGlow = ctx.createRadialGradient(W * 0.25, H * 0.5, 2, W * 0.25, H * 0.5, W * 0.28);
+  sunGlow.addColorStop(0.0, 'rgba(255,244,218,1)');
+  sunGlow.addColorStop(0.25, 'rgba(255,205,140,0.65)');
+  sunGlow.addColorStop(0.6, 'rgba(180,120,75,0.18)');
+  sunGlow.addColorStop(1.0, 'rgba(40,50,80,0)');
+  ctx.fillStyle = sunGlow;
+  ctx.fillRect(0, 0, W, H);
+
+  // 반대편 푸른 성운 림 반사광
+  const rimGlow = ctx.createRadialGradient(W * 0.78, H * 0.48, 4, W * 0.78, H * 0.48, W * 0.25);
+  rimGlow.addColorStop(0.0, 'rgba(130,195,255,0.55)');
+  rimGlow.addColorStop(0.5, 'rgba(70,125,210,0.22)');
+  rimGlow.addColorStop(1.0, 'rgba(20,35,70,0)');
+  ctx.fillStyle = rimGlow;
+  ctx.fillRect(0, 0, W, H);
+
+  const envTex = new THREE.CanvasTexture(cv);
+  envTex.mapping = THREE.EquirectangularReflectionMapping;
+  envTex.colorSpace = THREE.SRGBColorSpace;
+  const pmrem = new THREE.PMREMGenerator(renderer);
+  pmrem.compileEquirectangularShader();
+  scene.environment = pmrem.fromEquirectangular(envTex).texture;
+  scene.environmentIntensity = 0.85;
+  envTex.dispose();
+  pmrem.dispose();
+})();
+
 const camera = new THREE.PerspectiveCamera(CONFIG.cameraFov, innerWidth / innerHeight,
   CONFIG.cameraNear, CONFIG.cameraFar);
 camera.position.set(...CONFIG.cameraPos);
@@ -939,13 +1088,13 @@ const composer = new EffectComposer(renderer);
 composer.addPass(new RenderPass(scene, camera));
 const bloomPass = new UnrealBloomPass(
   new THREE.Vector2(innerWidth, innerHeight),
-  CONFIG.bloom.strength, CONFIG.bloom.radius, CONFIG.bloom.threshold);
+  CONFIG.bloom.strength, 0.42, 0.78);
 composer.addPass(bloomPass);
 // CSS 비네트가 이미 있으므로 GPU 비네트 패스는 중복 적용하지 않는다.
-const filmPass = new FilmPass(CONFIG.film.intensity, false);
+const filmPass = new FilmPass(CONFIG.film.intensity * 0.45, false);
 composer.addPass(filmPass);
 const rgbShiftPass = new ShaderPass(RGBShiftShader);
-rgbShiftPass.uniforms.amount.value = CONFIG.rgbShift.amount;
+rgbShiftPass.uniforms.amount.value = CONFIG.rgbShift.amount * 0.65;
 rgbShiftPass.uniforms.angle.value = 0;
 composer.addPass(rgbShiftPass);
 composer.addPass(new OutputPass());
@@ -955,9 +1104,9 @@ if (reduceMotion){
 }
 
 // 조명 (씬 루트에 두어 크기 비교 모드에서도 유지)
-const sunLight = new THREE.PointLight(0xfff1dd, 2.5, 0, 0); // decay 0
+const sunLight = new THREE.PointLight(0xfff3e2, 2.75, 0, 0); // decay 0
 scene.add(sunLight);
-scene.add(new THREE.AmbientLight(0x404860, 0.35));
+scene.add(new THREE.HemisphereLight(0x6b88b8, 0x1e2436, 0.42));
 
 /* --- U5: 렌즈 플레어 — 절차적 캔버스 텍스처만 사용 (핫링크 금지) --- */
 function makeFlareCoreTexture(){
@@ -1018,10 +1167,10 @@ lensflare.addElement(new LensflareElement(flareStreak, 240, 0.7, new THREE.Color
 sunLight.add(lensflare);
 
 /* ============================================================
-   절차적 텍스처 — 캔버스 기반
+   절차적 텍스처 — 고해상도 768×384 캔버스 + 소벨(Sobel) 탄젠트 노멀맵
 ============================================================ */
 function makeSurface(seed, pixelFn, postFn){
-  const W = 512, H = 256;
+  const W = 768, H = 384;
   const cv = document.createElement('canvas'); cv.width = W; cv.height = H;
   const ctx = cv.getContext('2d');
   const n1 = new TileNoise(seed), n2 = new TileNoise(seed * 13 + 7);
@@ -1043,23 +1192,24 @@ function makeSurface(seed, pixelFn, postFn){
   if (postFn) postFn(ctx, W, H);
   const tex = new THREE.CanvasTexture(cv);
   tex.colorSpace = THREE.SRGBColorSpace;
-  tex.anisotropy = 4;
+  tex.anisotropy = Math.min(renderer.capabilities.getMaxAnisotropy(), 8);
   return tex;
 }
 function drawCraters(ctx, W, H, count, seed){
   const rnd = mulberry32(seed);
+  const scale = W / 512;
   for (let i = 0; i < count; i++){
     const x = rnd() * W, y = H * (0.08 + 0.84 * rnd());
-    const r = 1 + rnd() * rnd() * 9;
+    const r = (1.2 + rnd() * rnd() * 9.5) * scale;
     for (const ox of [-W, 0, W]){ // 가로 이음새 처리
       const g = ctx.createRadialGradient(x + ox, y, r * 0.15, x + ox, y, r);
-      g.addColorStop(0, 'rgba(0,0,0,0.34)');
-      g.addColorStop(0.75, 'rgba(0,0,0,0.16)');
+      g.addColorStop(0, 'rgba(0,0,0,0.38)');
+      g.addColorStop(0.72, 'rgba(0,0,0,0.18)');
       g.addColorStop(1, 'rgba(0,0,0,0)');
       ctx.fillStyle = g;
       ctx.beginPath(); ctx.arc(x + ox, y, r, 0, TAU); ctx.fill();
-      ctx.strokeStyle = 'rgba(255,255,255,0.2)';
-      ctx.lineWidth = Math.max(0.6, r * 0.16);
+      ctx.strokeStyle = 'rgba(255,255,255,0.24)';
+      ctx.lineWidth = Math.max(0.8, r * 0.15);
       ctx.beginPath(); ctx.arc(x + ox - r * 0.14, y - r * 0.14, r * 0.82, 0, TAU); ctx.stroke();
     }
   }
@@ -1070,14 +1220,15 @@ function wrapDist(u, u0){ let d = u - u0; d -= Math.round(d); return d; }
 const PAINTERS = {
   mercury(u, v, n1, n2, c){
     const e = n1.fbm(u, v, 8, 4, 5);
-    const g = 108 + e * 56;
+    const det = n2.fbm(u, v, 24, 12, 4);
+    const g = 104 + e * 54 + (det - 0.5) * 18;
     c[0] = g * 1.03; c[1] = g * 0.98; c[2] = g * 0.93;
   },
   venus(u, v, n1, n2, c){
     const sw = n1.fbm(u, v, 5, 3, 4);
     const t = v + (sw - 0.5) * 0.3 + 0.06 * Math.sin(u * Math.PI * 4 + sw * 4);
     const s = Math.sin(t * Math.PI * 7 + sw * 2) * 0.5 + 0.5;
-    const det = n2.fbm(u, v, 14, 7, 3);
+    const det = n2.fbm(u, v, 16, 8, 4);
     const k = 0.9 + det * 0.18;
     c[0] = mixn(198, 238, s) * k; c[1] = mixn(156, 206, s) * k; c[2] = mixn(104, 148, s) * k;
   },
@@ -1104,7 +1255,7 @@ const PAINTERS = {
   mars(u, v, n1, n2, c){
     const e = n1.fbm(u, v, 7, 4, 5);
     let r = mixn(146, 206, e), g = mixn(76, 118, e), b = mixn(50, 74, e);
-    const dk = n2.fbm(u, v, 9, 5, 4);
+    const dk = n2.fbm(u, v, 11, 6, 5);
     if (dk > 0.6){
       const q = smooth(0.6, 0.78, dk) * 0.45;
       r *= 1 - q * 0.5; g *= 1 - q * 0.45; b *= 1 - q * 0.4;
@@ -1121,7 +1272,7 @@ const PAINTERS = {
     let r = 214 + s1 * 18 + s3 * 7, g = 186 + s1 * 16 + s3 * 6, b = 150 + s1 * 14 + s3 * 5;
     const belt = smooth(0.35, -0.2, s2);
     r = mixn(r, 158, belt * 0.55); g = mixn(g, 110, belt * 0.55); b = mixn(b, 78, belt * 0.55);
-    const tur = n2.fbm(u, v, 18, 9, 3), tv = 0.9 + tur * 0.2;
+    const tur = n2.fbm(u, v, 18, 9, 4), tv = 0.9 + tur * 0.2;
     r *= tv; g *= tv; b *= tv;
     // 대적점 (Great Red Spot)
     const du = wrapDist(u, 0.72), dv = v - 0.66;
@@ -1138,7 +1289,7 @@ const PAINTERS = {
     const wob = (n1.fbm(u, v, 7, 4, 3) - 0.5) * 0.02;
     const t = v + wob;
     const s = Math.sin(t * Math.PI * 10 + 0.8) * 0.5 + 0.5;
-    const k = 0.94 + n2.fbm(u, v, 12, 6, 3) * 0.12;
+    const k = 0.94 + n2.fbm(u, v, 14, 7, 4) * 0.12;
     c[0] = mixn(214, 182, s) * k; c[1] = mixn(188, 152, s) * k; c[2] = mixn(142, 108, s) * k;
   },
   uranus(u, v, n1, n2, c){
@@ -1154,7 +1305,7 @@ const PAINTERS = {
     const t = v + wob;
     const s = Math.sin(t * Math.PI * 9 + 1.2) * 0.5 + 0.5;
     let r = mixn(38, 72, s), g = mixn(70, 114, s), b = mixn(155, 208, s);
-    const w = n2.fbm(u, v, 22, 11, 3);
+    const w = n2.fbm(u, v, 22, 11, 4);
     if (w > 0.66){
       const q = smooth(0.66, 0.8, w) * 0.5;
       r = mixn(r, 212, q); g = mixn(g, 226, q); b = mixn(b, 246, q);
@@ -1176,7 +1327,7 @@ const PAINTERS = {
 };
 
 function makeCloudTexture(seed){
-  const W = 512, H = 256;
+  const W = 768, H = 384;
   const cv = document.createElement('canvas'); cv.width = W; cv.height = H;
   const ctx = cv.getContext('2d');
   const n1 = new TileNoise(seed), n2 = new TileNoise(seed * 7 + 3);
@@ -1198,7 +1349,7 @@ function makeCloudTexture(seed){
 }
 
 function makeRingTexture(){
-  const W = 512, H = 16;
+  const W = 1024, H = 16;
   const cv = document.createElement('canvas'); cv.width = W; cv.height = H;
   const ctx = cv.getContext('2d');
   const n = new TileNoise(77);
@@ -1218,6 +1369,131 @@ function makeRingTexture(){
   return tex;
 }
 
+function makeBumpFromTexture(colorTex){
+  const src = colorTex.image;
+  const W = src.width, H = src.height;
+  const cv = document.createElement('canvas'); cv.width = W; cv.height = H;
+  const ctx = cv.getContext('2d');
+  ctx.drawImage(src, 0, 0);
+  const img = ctx.getImageData(0, 0, W, H), d = img.data;
+  for (let i = 0; i < d.length; i += 4){
+    const lum = (d[i] * 0.299 + d[i + 1] * 0.587 + d[i + 2] * 0.114) | 0;
+    d[i] = lum; d[i + 1] = lum; d[i + 2] = lum; d[i + 3] = 255;
+  }
+  ctx.putImageData(img, 0, 0);
+  const bump = new THREE.CanvasTexture(cv);
+  bump.anisotropy = 4;
+  return bump;
+}
+
+// 3x3 Sobel 탄젠트 공간 NormalMap 생성기 (행성·위성 크레이터/협곡 입체 음영 강화)
+function makeNormalFromTexture(colorTex, strength = 2.4){
+  const src = colorTex.image;
+  const W = src.width, H = src.height;
+  const cv = document.createElement('canvas'); cv.width = W; cv.height = H;
+  const ctx = cv.getContext('2d');
+  ctx.drawImage(src, 0, 0);
+  const srcData = ctx.getImageData(0, 0, W, H).data;
+  const luma = new Float32Array(W * H);
+  for (let i = 0, p = 0; i < srcData.length; i += 4, p++){
+    luma[p] = (srcData[i] * 0.299 + srcData[i + 1] * 0.587 + srcData[i + 2] * 0.114) / 255;
+  }
+  const outImg = ctx.createImageData(W, H);
+  const od = outImg.data;
+  const hAt = (x, y) => luma[Math.min(H - 1, Math.max(0, y)) * W + ((x + W) % W)];
+  for (let y = 0; y < H; y++){
+    for (let x = 0; x < W; x++){
+      const tl = hAt(x - 1, y - 1), tc = hAt(x, y - 1), tr = hAt(x + 1, y - 1);
+      const ml = hAt(x - 1, y),                         mr = hAt(x + 1, y);
+      const bl = hAt(x - 1, y + 1), bc = hAt(x, y + 1), br = hAt(x + 1, y + 1);
+      const dx = (tr + 2 * mr + br - (tl + 2 * ml + bl)) * strength;
+      const dy = (bl + 2 * bc + br - (tl + 2 * tc + tr)) * strength;
+      const inv = 1 / Math.hypot(dx, dy, 1);
+      const idx = (y * W + x) * 4;
+      od[idx]     = ((-dx * inv * 0.5 + 0.5) * 255) | 0;
+      od[idx + 1] = ((-dy * inv * 0.5 + 0.5) * 255) | 0;
+      od[idx + 2] = ((inv * 0.5 + 0.5) * 255) | 0;
+      od[idx + 3] = 255;
+    }
+  }
+  ctx.putImageData(outImg, 0, 0);
+  const norm = new THREE.CanvasTexture(cv);
+  norm.anisotropy = 4;
+  return norm;
+}
+
+function makeUranusRingTexture(){
+  const W = 512, H = 16;
+  const cv = document.createElement('canvas'); cv.width = W; cv.height = H;
+  const ctx = cv.getContext('2d');
+  // Narrow icy-cyan/silver ringlets (6, 5, 4, alpha, beta, eta, gamma, delta, epsilon)
+  const ringlets = [
+    [0.12, 0.015, 0.22], [0.22, 0.018, 0.28], [0.34, 0.022, 0.35],
+    [0.48, 0.025, 0.42], [0.62, 0.020, 0.38], [0.76, 0.028, 0.52],
+    [0.90, 0.042, 0.85]
+  ];
+  for (let x = 0; x < W; x++){
+    const t = x / W;
+    let a = 0.03 * smooth(0, 0.08, t) * smooth(1, 0.96, t);
+    for (const [center, width, peak] of ringlets){
+      const d = Math.abs(t - center) / width;
+      if (d < 1) a += peak * (1 - d * d);
+    }
+    a = Math.min(0.85, a);
+    ctx.fillStyle = `rgba(175,228,242,${a.toFixed(3)})`;
+    ctx.fillRect(x, 0, 1, H);
+  }
+  const tex = new THREE.CanvasTexture(cv);
+  tex.colorSpace = THREE.SRGBColorSpace;
+  return tex;
+}
+
+function makeRingMaterial(mapTex, planetRadius, isUranus = false){
+  return new THREE.ShaderMaterial({
+    uniforms: {
+      uMap: { value: mapTex },
+      uPlanetPos: { value: new THREE.Vector3(1, 0, 0) },
+      uPlanetRadius: { value: planetRadius },
+      uOpacityScale: { value: isUranus ? 0.72 : 1.0 }
+    },
+    vertexShader: `
+      varying vec2 vUv;
+      varying vec3 vWorldPos;
+      void main(){
+        vUv = uv;
+        vec4 wp = modelMatrix * vec4(position, 1.0);
+        vWorldPos = wp.xyz;
+        gl_Position = projectionMatrix * viewMatrix * wp;
+      }`,
+    fragmentShader: `
+      uniform sampler2D uMap;
+      uniform vec3 uPlanetPos;
+      uniform float uPlanetRadius;
+      uniform float uOpacityScale;
+      varying vec2 vUv;
+      varying vec3 vWorldPos;
+      void main(){
+        vec4 tex = texture2D(uMap, vUv);
+        if (tex.a < 0.005) discard;
+        vec3 toFrag = vWorldPos - uPlanetPos;
+        vec3 sunDir = normalize(-uPlanetPos);
+        float proj = dot(toFrag, sunDir);
+        float perpDist = length(toFrag - sunDir * proj);
+        float shadow = proj < 0.0
+          ? smoothstep(uPlanetRadius * 0.86, uPlanetRadius * 1.05, perpDist)
+          : 1.0;
+        vec3 viewDir = normalize(cameraPosition - vWorldPos);
+        // Forward scattering + Seeliger opposition surge + micro ringlet bands
+        float forwardScatter = 0.24 * pow(max(dot(viewDir, -sunDir), 0.0), 2.2);
+        float oppositionSurge = 0.18 * pow(max(dot(viewDir, sunDir), 0.0), 4.5);
+        float fineRinglets = 0.92 + 0.08 * sin(vUv.x * 280.0);
+        float scatter = (0.86 + forwardScatter + oppositionSurge) * fineRinglets;
+        vec3 col = tex.rgb * scatter * mix(0.12, 1.08, shadow);
+        gl_FragColor = vec4(col, tex.a * uOpacityScale);
+      }`,
+    transparent: true, side: THREE.DoubleSide, depthWrite: false
+  });
+}
 function makeGlowTexture(){
   const s = 256;
   const cv = document.createElement('canvas'); cv.width = s; cv.height = s;
@@ -1515,21 +1791,56 @@ function setBodyOrbitPosition(body){
     body.data, body.orbit, E, body.group.position);
 }
 const moonTexture = makeSurface(99, PAINTERS.moon, (ctx, W, H) => drawCraters(ctx, W, H, 90, 4242));
+const moonNormalTexture = makeNormalFromTexture(moonTexture, 4.2);
 let moonPivot = null;
 
 const cloudTexture = makeCloudTexture(123);
 let earthBody = null, cloudMat = null, moonMat = null;
+const earthShaderUniforms = {
+  uSunDir: { value: new THREE.Vector3(0, 0, 1) },
+  uHover: { value: 0 }
+};
+
+/* --- 주요 위성계 데이터 (지구·화성·목성·토성) --- */
+const MOON_SYSTEMS = {
+  earth: [
+    { key:'moon', nameKo:'달', radius:0.28, dist:3.2, periodDays:27.3, inclination:5.1, color:0xd8dce3, useMoonTex:true }
+  ],
+  mars: [
+    { key:'phobos', nameKo:'포보스', radius:0.10, dist:1.95, periodDays:1.8, inclination:1.1, color:0xb59f8c, irregular:true },
+    { key:'deimos', nameKo:'데이모스', radius:0.08, dist:2.55, periodDays:3.6, inclination:1.8, color:0x9e8f80, irregular:true }
+  ],
+  jupiter: [
+    { key:'io', nameKo:'이오', radius:0.22, dist:6.1, periodDays:3.5, inclination:0.05, color:0xffcf5c, emissive:0x663500 },
+    { key:'europa', nameKo:'유로파', radius:0.19, dist:7.3, periodDays:7.1, inclination:0.47, color:0xdce8f4, emissive:0x223648 },
+    { key:'ganymede', nameKo:'가니메데', radius:0.30, dist:8.7, periodDays:14.3, inclination:0.20, color:0xa89f93, emissive:0x24201b },
+    { key:'callisto', nameKo:'칼리스토', radius:0.27, dist:10.3, periodDays:33.4, inclination:0.28, color:0x7a7268, emissive:0x181512 }
+  ],
+  saturn: [
+    { key:'enceladus', nameKo:'엔셀라두스', radius:0.15, dist:5.3, periodDays:4.5, inclination:0.02, color:0xebf6ff, emissive:0x2a4558 },
+    { key:'titan', nameKo:'타이탄', radius:0.32, dist:9.8, periodDays:31.9, inclination:0.35, color:0xe6a652, emissive:0x4a2c0a }
+  ]
+};
 
 /* --- U6/U7: 균일(uniform) 기반 프레넬 림 셸 셰이더 — 행성별 색/세기/황혼 틴트 --- */
 const RIM_CONFIG = {
   mercury: { color: [0.541, 0.522, 0.502], intensity: 0.25 },          // #8a8580
-  venus:   { color: [0.90, 0.80, 0.55], intensity: 0.55 },             // U6 옅은 황색 림
-  earth:   { color: [0.45, 0.55, 1.00], intensity: 0.9, dusk: 1 },     // U6 + 황혼 틴트
-  mars:    { color: [0.753, 0.471, 0.314], intensity: 0.25 },          // #c07850
-  jupiter: { color: [0.847, 0.722, 0.565], intensity: 0.45 },          // #d8b890
-  saturn:  { color: [0.910, 0.847, 0.659], intensity: 0.45 },          // #e8d8a8
-  uranus:  { color: [0.624, 0.847, 0.863], intensity: 0.45 },          // #9fd8dc
-  neptune: { color: [0.30, 0.50, 1.00], intensity: 0.45 }              // U6 옅은 청색 림
+  venus:   { color: [0.92, 0.82, 0.56], intensity: 0.62, dusk: 0.35 }, // 금성 두터운 대기 산란
+  earth:   { color: [0.42, 0.62, 1.00], intensity: 1.05, dusk: 1.0 },  // 지구 레일리 + 황혼 터미네이터
+  mars:    { color: [0.82, 0.48, 0.32], intensity: 0.38, dusk: 0.45 }, // 화성 먼지 대기 림
+  jupiter: { color: [0.847, 0.722, 0.565], intensity: 0.48 },          // #d8b890
+  saturn:  { color: [0.910, 0.847, 0.659], intensity: 0.48 },          // #e8d8a8
+  uranus:  { color: [0.624, 0.847, 0.863], intensity: 0.52 },          // #9fd8dc
+  neptune: { color: [0.30, 0.52, 1.00], intensity: 0.55 }              // 해왕성 메탄 청색 림
+};
+const SURFACE_MATERIAL_PROPS = {
+  mercury: { normalStrength: 4.5, normalScale: 0.85, roughness: 0.88, metalness: 0.06 },
+  venus:   { normalStrength: 2.2, normalScale: 0.32, roughness: 0.72, metalness: 0.0 },
+  mars:    { normalStrength: 4.0, normalScale: 0.78, roughness: 0.84, metalness: 0.04 },
+  jupiter: { normalStrength: 1.8, normalScale: 0.24, roughness: 0.68, metalness: 0.0 },
+  saturn:  { normalStrength: 1.5, normalScale: 0.20, roughness: 0.70, metalness: 0.0 },
+  uranus:  { normalStrength: 1.1, normalScale: 0.14, roughness: 0.62, metalness: 0.0 },
+  neptune: { normalStrength: 1.6, normalScale: 0.22, roughness: 0.60, metalness: 0.0 }
 };
 function makeRimMaterial(color, intensity, duskStrength){
   return new THREE.ShaderMaterial({
@@ -1558,21 +1869,23 @@ function makeRimMaterial(color, intensity, duskStrength){
       void main(){
         vec3 nrm = normalize(vWorldNormal);
         vec3 viewDir = normalize(cameraPosition - vWorldPos);
-        float ndv = dot(nrm, viewDir);               // BackSide 뒷면: 대략 (-0.31 ~ 0)
-        float rim = pow(max(1.0 - ndv, 0.0), 5.5);   // 행성 가장자리에서 최대
-        rim *= smoothstep(0.0, 0.1, -ndv);           // 외곽 실루엣으로 갈수록 0으로 페이드
-        rim *= 0.25;
+        float ndv = dot(nrm, viewDir);
+        float rim = pow(max(1.0 - ndv, 0.0), 4.8);
+        rim *= smoothstep(0.0, 0.12, -ndv);
+        rim *= 0.28;
         float nds = dot(nrm, uSunDir);
-        float sunFactor = pow(clamp(3.0 * max(nds, 0.0), 0.0, 1.0), 3.0);
-        // terminator 황혼 틴트 (지구 전용)
-        float duskFactor = pow(clamp(1.0 - abs(nds), 0.0, 1.0), 2.0) * uDusk;
-        vec3 rimColor = mix(uColor, vec3(1.0, 0.45, 0.2), duskFactor * 0.6);
-        gl_FragColor = vec4(rimColor * rim * sunFactor * uIntensity, 1.0);
+        float sunFactor = smoothstep(-0.22, 0.65, nds);
+        // 레일리 대기 산란: 주간 청색/고유색 → 터미네이터(황혼) 주황/산호색 전이
+        float terminator = exp(-pow((nds - 0.04) * 3.8, 2.0)) * uDusk;
+        vec3 duskColor = vec3(1.0, 0.42, 0.16);
+        vec3 rimColor = mix(uColor, duskColor, clamp(terminator * 0.82, 0.0, 0.85));
+        gl_FragColor = vec4(rimColor * rim * (sunFactor + terminator * 0.45) * uIntensity, 1.0);
       }`,
     side: THREE.BackSide, blending: THREE.AdditiveBlending, transparent: true, depthWrite: false
   });
 }
 const ringTexture = makeRingTexture();
+const uranusRingTexture = makeUranusRingTexture();
 
 PLANET_DATA.forEach((d, idx) => {
   const group = new THREE.Group();
@@ -1581,17 +1894,46 @@ PLANET_DATA.forEach((d, idx) => {
   tiltGroup.rotation.z = THREE.MathUtils.degToRad(d.tilt);
   group.add(tiltGroup);
 
-  const tex = makeSurface(d.seed, PAINTERS[d.key],
-    d.key === 'mercury' ? (ctx, W, H) => drawCraters(ctx, W, H, 120, d.seed * 31) : null);
-  // U1: 지구는 해양 반사광(ocean shine) 트릭을 위한 Phong — 나머지는 Standard 유지
-  const mat = d.key === 'earth'
-    ? new THREE.MeshPhongMaterial({
-        map: tex, specular: new THREE.Color(0x7c7c7c), shininess: 15 })
-    : new THREE.MeshStandardMaterial({
-        map: tex, roughness: 1, metalness: 0,
-        emissive: 0xffffff, emissiveMap: tex, emissiveIntensity: 0
-      });
-  const highGeometry = new THREE.SphereGeometry(d.size, 48, 32);
+  const craterPostFn = d.key === 'mercury'
+    ? (ctx, W, H) => drawCraters(ctx, W, H, 120, d.seed * 31)
+    : d.key === 'mars'
+      ? (ctx, W, H) => drawCraters(ctx, W, H, 65, d.seed * 19)
+      : null;
+  const tex = makeSurface(d.seed, PAINTERS[d.key], craterPostFn);
+  const surfProps = SURFACE_MATERIAL_PROPS[d.key] || { normalStrength: 2.2, normalScale: 0.35, roughness: 0.8, metalness: 0 };
+  const normalTex = d.key === 'earth' ? null : makeNormalFromTexture(tex, surfProps.normalStrength);
+
+  // U1: 지구는 해양 반사광(ocean shine) + 야간 도시 불빛 주야간 마스킹 셰이더 보정
+  let mat;
+  if (d.key === 'earth'){
+    mat = new THREE.MeshPhongMaterial({
+      map: tex, specular: new THREE.Color(0x8899aa), shininess: 22
+    });
+    mat.onBeforeCompile = shader => {
+      shader.uniforms.uSunDir = earthShaderUniforms.uSunDir;
+      shader.uniforms.uHover = earthShaderUniforms.uHover;
+      shader.vertexShader = shader.vertexShader
+        .replace('#include <common>', '#include <common>\nvarying vec3 vEarthWorldNormal;')
+        .replace('#include <worldpos_vertex>', '#include <worldpos_vertex>\nvEarthWorldNormal = normalize(mat3(modelMatrix) * objectNormal);');
+      shader.fragmentShader = shader.fragmentShader
+        .replace('#include <common>', '#include <common>\nuniform vec3 uSunDir;\nuniform float uHover;\nvarying vec3 vEarthWorldNormal;')
+        .replace(
+          '#include <emissivemap_fragment>',
+          `#include <emissivemap_fragment>
+           float earthNightMask = smoothstep(0.16, -0.24, dot(normalize(vEarthWorldNormal), uSunDir));
+           totalEmissiveRadiance *= clamp(earthNightMask * 1.55 + uHover, 0.0, 1.8);`
+        );
+    };
+  } else {
+    mat = new THREE.MeshStandardMaterial({
+      map: tex,
+      normalMap: normalTex,
+      normalScale: new THREE.Vector2(surfProps.normalScale, surfProps.normalScale),
+      roughness: surfProps.roughness, metalness: surfProps.metalness,
+      emissive: 0xffffff, emissiveMap: tex, emissiveIntensity: 0
+    });
+  }
+  const highGeometry = new THREE.SphereGeometry(d.size, 56, 36);
   const lowGeometry = new THREE.SphereGeometry(d.size, 24, 16);
   const mesh = new THREE.Mesh(highGeometry, mat);
   tiltGroup.add(mesh);
@@ -1599,15 +1941,16 @@ PLANET_DATA.forEach((d, idx) => {
   // U6/U7: 프레넬 림 셸 (1.05배, BackSide additive)
   const rc = RIM_CONFIG[d.key];
   const rimMat = makeRimMaterial(rc.color, rc.intensity, rc.dusk || 0);
-  const highRimGeometry = new THREE.SphereGeometry(d.size * 1.05, 48, 32);
+  const highRimGeometry = new THREE.SphereGeometry(d.size * 1.05, 56, 36);
   const lowRimGeometry = new THREE.SphereGeometry(d.size * 1.05, 24, 16);
   const rimMesh = new THREE.Mesh(highRimGeometry, rimMat);
   tiltGroup.add(rimMesh);
 
   const body = {
     data: d, group, mesh, tiltGroup, material: mat,
-    radius: d.size, orbit, hoverT: 0, texture: tex,
-    rimMat, rimMesh, baseEmissive: 0, lod: 'high',
+    radius: d.size, orbit, hoverT: 0, texture: tex, bumpTexture: normalTex,
+    rimMat, rimMesh, ringMat: null, moons: [], moonOrbitGroup: null,
+    baseEmissive: 0, lod: 'high',
     geometries: {
       high: highGeometry, low: lowGeometry,
       highRim: highRimGeometry, lowRim: lowRimGeometry
@@ -1615,26 +1958,79 @@ PLANET_DATA.forEach((d, idx) => {
   };
   mesh.userData.body = body;
 
-  // 지구: 구름 + 달 (대기 림 셸은 위 공통 셸로 처리)
+  // 지구: 구름 레이어
   if (d.key === 'earth'){
     earthBody = body;
     cloudMat = new THREE.MeshStandardMaterial({ map: cloudTexture, transparent: true,
       depthWrite: false, roughness: 1, opacity: 0.9 });
     const clouds = new THREE.Mesh(
-      new THREE.SphereGeometry(d.size * 1.03, 48, 32), cloudMat);
+      new THREE.SphereGeometry(d.size * 1.03, 56, 36), cloudMat);
     tiltGroup.add(clouds);
     body.clouds = clouds;
-    moonPivot = new THREE.Group();
-    moonPivot.rotation.x = 0.09;
-    moonMat = new THREE.MeshStandardMaterial({ map: moonTexture, roughness: 1 });
-    const moon = new THREE.Mesh(
-      new THREE.SphereGeometry(0.28, 24, 16), moonMat);
-    moon.position.set(3.2, 0, 0);
-    moonPivot.add(moon);
-    group.add(moonPivot);
   }
 
-  // 토성 고리
+  // 주요 위성계 생성 (지구, 화성, 목성, 토성)
+  const moonDefs = MOON_SYSTEMS[d.key];
+  if (moonDefs){
+    const moonOrbitGroup = new THREE.Group();
+    body.moonOrbitGroup = moonOrbitGroup;
+    group.add(moonOrbitGroup);
+    moonDefs.forEach((mDef, mIdx) => {
+      const planeGroup = new THREE.Group();
+      planeGroup.rotation.x = THREE.MathUtils.degToRad(mDef.inclination || 0);
+      planeGroup.rotation.z = THREE.MathUtils.degToRad((mIdx * 37) % 12 - 6);
+      group.add(planeGroup);
+
+      // 위성 궤도 링 (근접 시 표시)
+      const orbitPts = [];
+      for (let i = 0; i < 96; i++){
+        const a = (i / 96) * TAU;
+        orbitPts.push(new THREE.Vector3(Math.cos(a) * mDef.dist, 0, Math.sin(a) * mDef.dist));
+      }
+      const orbitLineMat = new THREE.LineBasicMaterial({
+        color: mDef.color, transparent: true, opacity: 0, depthWrite: false
+      });
+      const orbitLine = new THREE.LineLoop(new THREE.BufferGeometry().setFromPoints(orbitPts), orbitLineMat);
+      orbitLine.rotation.copy(planeGroup.rotation);
+      moonOrbitGroup.add(orbitLine);
+
+      const pivot = new THREE.Group();
+      pivot.rotation.y = mIdx * 1.7 + 0.4;
+      planeGroup.add(pivot);
+
+      const mGeo = mDef.irregular
+        ? makeIrregularCometGeometry(101 + mIdx * 43, mDef.radius, [1.28, 0.85, 0.96])
+        : new THREE.SphereGeometry(mDef.radius, 28, 18);
+      const mScale = mDef.irregular ? 0.85 : 0.65;
+      const mMat = new THREE.MeshStandardMaterial({
+        map: mDef.useMoonTex ? moonTexture : null,
+        normalMap: moonNormalTexture,
+        normalScale: new THREE.Vector2(mScale, mScale),
+        color: mDef.useMoonTex ? 0xffffff : mDef.color,
+        emissive: mDef.emissive || 0x111318,
+        emissiveIntensity: mDef.emissive ? 0.32 : 0.15,
+        roughness: 0.88
+      });
+      if (mDef.useMoonTex){
+        moonMat = mMat;
+        moonPivot = pivot;
+      }
+      const mMesh = new THREE.Mesh(mGeo, mMat);
+      mMesh.position.set(mDef.dist, 0, 0);
+      pivot.add(mMesh);
+
+      const mLabel = makeLabel(mDef.nameKo, 'label moon-label');
+      mLabel.position.set(0, mDef.radius + 0.38, 0);
+      mLabel.element.style.opacity = '0';
+      mMesh.add(mLabel);
+
+      body.moons.push({
+        def: mDef, pivot, mesh: mMesh, label: mLabel, orbitLineMat
+      });
+    });
+  }
+
+  // 토성 & 천왕성 고리 (행성 본체 그림자 및 산란 셰이더 적용)
   if (d.ring){
     const inner = d.ring.inner, outer = d.ring.outer;
     const geo = new THREE.RingGeometry(inner, outer, 128, 1);
@@ -1645,10 +2041,29 @@ PLANET_DATA.forEach((d, idx) => {
       const r = Math.hypot(v3.x, v3.y);
       uv.setXY(i, (r - inner) / (outer - inner), 0.5);
     }
-    const ring = new THREE.Mesh(geo, new THREE.MeshBasicMaterial({
-      map: ringTexture, transparent: true, side: THREE.DoubleSide, depthWrite: false }));
+    const rTex = d.ring.uranus ? uranusRingTexture : ringTexture;
+    const rMat = makeRingMaterial(rTex, d.size, Boolean(d.ring.uranus));
+    const ring = new THREE.Mesh(geo, rMat);
     ring.rotation.x = -Math.PI / 2;
     tiltGroup.add(ring);
+    body.ringMat = rMat;
+  }
+
+  // 천왕성 97.8° 자전축 가이드 라인
+  if (d.key === 'uranus'){
+    const axisLen = d.size * 1.85;
+    const axisGeo = new THREE.BufferGeometry().setFromPoints([
+      new THREE.Vector3(0, -axisLen, 0),
+      new THREE.Vector3(0, axisLen, 0)
+    ]);
+    const axisMat = new THREE.LineDashedMaterial({
+      color: 0x9ef0ff, dashSize: 0.35, gapSize: 0.22,
+      transparent: true, opacity: 0.45, depthWrite: false
+    });
+    const axisLine = new THREE.Line(axisGeo, axisMat);
+    axisLine.computeLineDistances();
+    tiltGroup.add(axisLine);
+    body.axisGuide = axisLine;
   }
 
   // 라벨
@@ -1678,19 +2093,74 @@ PLANET_DATA.forEach((d, idx) => {
 });
 
 /* ============================================================
-   유성우 — 지구 대기권 진입 개념 시각화
+   유성우 — 지구 대기권 진입 개념 시각화 (대기권 프레넬 셸 + 복사점 비콘 + 발광 유성)
 ============================================================ */
 const meteorShowerGroup = new THREE.Group();
 meteorShowerGroup.visible = false;
 earthBody.group.add(meteorShowerGroup);
 
-const meteorAtmosphereMat = new THREE.MeshBasicMaterial({
-  color:0xffb36b, transparent:true, opacity:0.13, wireframe:true,
-  blending:THREE.AdditiveBlending, depthWrite:false
+const meteorShellUniforms = {
+  uColor: { value: new THREE.Color(0xffb36b) },
+  uRadiantDir: { value: new THREE.Vector3(0.88, 0.34, -0.33).normalize() },
+  uTime: { value: 0 }
+};
+const meteorAtmosphereMat = {
+  color: meteorShellUniforms.uColor.value,
+  opacity: 0.13
+};
+const meteorAtmosphereShellMat = new THREE.ShaderMaterial({
+  uniforms: meteorShellUniforms,
+  vertexShader: `
+    varying vec3 vNormal;
+    varying vec3 vViewDir;
+    varying vec3 vLocalNormal;
+    void main(){
+      vLocalNormal = normalize(position);
+      vNormal = normalize(normalMatrix * normal);
+      vec4 mv = modelViewMatrix * vec4(position, 1.0);
+      vViewDir = -normalize(mv.xyz);
+      gl_Position = projectionMatrix * mv;
+    }`,
+  fragmentShader: `
+    uniform vec3 uColor;
+    uniform vec3 uRadiantDir;
+    uniform float uTime;
+    varying vec3 vNormal;
+    varying vec3 vViewDir;
+    varying vec3 vLocalNormal;
+    void main(){
+      float fresnel = pow(1.0 - clamp(abs(dot(normalize(vNormal), normalize(vViewDir))), 0.0, 1.0), 2.3);
+      float entrySide = smoothstep(-0.25, 0.85, dot(normalize(vLocalNormal), normalize(uRadiantDir)));
+      float pulse = 0.85 + 0.15 * sin(uTime * 2.4 + vLocalNormal.y * 6.0);
+      float alpha = (fresnel * 0.32 + entrySide * 0.12) * pulse;
+      gl_FragColor = vec4(uColor * (0.9 + entrySide * 0.4), alpha);
+    }`,
+  transparent: true, blending: THREE.AdditiveBlending, side: THREE.DoubleSide, depthWrite: false
 });
 const meteorAtmosphereGuide = new THREE.Mesh(
-  new THREE.SphereGeometry(earthBody.radius * 1.18, 32, 18), meteorAtmosphereMat);
+  new THREE.SphereGeometry(earthBody.radius * 1.18, 40, 24), meteorAtmosphereShellMat);
 meteorShowerGroup.add(meteorAtmosphereGuide);
+
+// 복사점(Radiant) 방향 비콘 링 + 가이드
+const meteorRadiantBeacon = new THREE.Group();
+const radiantRing1 = new THREE.Mesh(
+  new THREE.TorusGeometry(0.55, 0.03, 8, 32),
+  new THREE.MeshBasicMaterial({ color: 0xffcfa0, transparent: true, opacity: 0.72, blending: THREE.AdditiveBlending, depthWrite: false })
+);
+const radiantRing2 = new THREE.Mesh(
+  new THREE.TorusGeometry(0.95, 0.02, 8, 32),
+  new THREE.MeshBasicMaterial({ color: 0xffb36b, transparent: true, opacity: 0.42, blending: THREE.AdditiveBlending, depthWrite: false })
+);
+const radiantCore = new THREE.Sprite(new THREE.SpriteMaterial({
+  map: glowTex, color: 0xffe4bd, transparent: true, opacity: 0.85,
+  blending: THREE.AdditiveBlending, depthWrite: false
+}));
+radiantCore.scale.set(1.6, 1.6, 1);
+meteorRadiantBeacon.add(radiantRing1, radiantRing2, radiantCore);
+const meteorRadiantLabel = makeLabel('복사점 방향', 'label meteor-label');
+meteorRadiantLabel.position.set(0, 1.25, 0);
+meteorRadiantBeacon.add(meteorRadiantLabel);
+meteorShowerGroup.add(meteorRadiantBeacon);
 
 const meteorModeLabel = makeLabel('유성우 · 지구 대기권', 'label meteor-label');
 meteorModeLabel.position.set(0, earthBody.radius + 2.8, 0);
@@ -1704,28 +2174,45 @@ const meteorImpact = new THREE.Vector3();
 const meteorHead = new THREE.Vector3();
 const meteorTail = new THREE.Vector3();
 const meteorStreaks = [];
-const meteorStreakCount = reduceMotion ? 8 : 24;
+const meteorStreakCount = reduceMotion ? 10 : 28;
+const starTex = makeStarSprite();
 
 for (let i = 0; i < meteorStreakCount; i++){
   const positions = new Float32Array(6);
+  const colors = new Float32Array([0.1, 0.05, 0.02, 1.0, 0.95, 0.88]);
   const geometry = new THREE.BufferGeometry();
   const position = new THREE.BufferAttribute(positions, 3);
+  const colorAttr = new THREE.BufferAttribute(colors, 3);
   position.setUsage(THREE.DynamicDrawUsage);
+  colorAttr.setUsage(THREE.DynamicDrawUsage);
   geometry.setAttribute('position', position);
+  geometry.setAttribute('color', colorAttr);
   const material = new THREE.LineBasicMaterial({
-    color:0xffb36b, transparent:true, opacity:0.52 + meteorRnd() * 0.38,
+    color:0xffb36b, vertexColors:true, transparent:true, opacity:0.65 + meteorRnd() * 0.32,
     blending:THREE.AdditiveBlending, depthWrite:false
   });
   const line = new THREE.Line(geometry, material);
   line.frustumCulled = false;
   meteorShowerGroup.add(line);
+
+  // 유성 머리(Head) 광원 스프라이트 & 소멸 섬광
+  const headSprite = new THREE.Sprite(new THREE.SpriteMaterial({
+    map: starTex, color: 0xfff4df, transparent: true, opacity: 0.9,
+    blending: THREE.AdditiveBlending, depthWrite: false
+  }));
+  const baseHeadSize = 0.28 + meteorRnd() * 0.22;
+  headSprite.scale.set(baseHeadSize, baseHeadSize, 1);
+  meteorShowerGroup.add(headSprite);
+
   meteorStreaks.push({
     line,
+    headSprite,
+    baseHeadSize,
     progress:meteorRnd(),
-    speed:0.28 + meteorRnd() * 0.5,
+    speed:0.32 + meteorRnd() * 0.52,
     offsetA:(meteorRnd() - 0.5) * earthBody.radius * 1.55,
     offsetB:(meteorRnd() - 0.5) * earthBody.radius * 1.55,
-    length:0.65 + meteorRnd() * 1.15,
+    length:0.85 + meteorRnd() * 1.35,
     delay:meteorRnd() * 0.55
   });
 }
@@ -1735,6 +2222,12 @@ function updateMeteorBasis(){
     ? new THREE.Vector3(1, 0, 0) : new THREE.Vector3(0, 1, 0);
   meteorTangent.crossVectors(meteorTravelDir, reference).normalize();
   meteorBitangent.crossVectors(meteorTravelDir, meteorTangent).normalize();
+  // 복사점 비콘 배치 (유성이 날아오는 출발 방향)
+  meteorShellUniforms.uRadiantDir.value.copy(meteorTravelDir).negate();
+  meteorRadiantBeacon.position.copy(meteorTravelDir).multiplyScalar(-8.2);
+  meteorRadiantBeacon.lookAt(0, 0, 0);
+  radiantRing1.material.color.copy(meteorShellUniforms.uColor.value).lerp(new THREE.Color(0xffffff), 0.35);
+  radiantRing2.material.color.copy(meteorShellUniforms.uColor.value);
 }
 function writeMeteorStreak(streak){
   const visibleProgress = THREE.MathUtils.clamp((streak.progress - streak.delay) / (1 - streak.delay), 0, 1);
@@ -1742,12 +2235,23 @@ function writeMeteorStreak(streak){
   meteorImpact.copy(meteorTangent).multiplyScalar(streak.offsetA)
     .addScaledVector(meteorBitangent, streak.offsetB);
   meteorHead.copy(meteorImpact).addScaledVector(meteorTravelDir, -approach);
-  meteorTail.copy(meteorHead).addScaledVector(meteorTravelDir, -streak.length);
+  const tailScale = Math.sin(visibleProgress * Math.PI);
+  meteorTail.copy(meteorHead).addScaledVector(meteorTravelDir, -streak.length * (0.45 + 0.65 * tailScale));
   const attr = streak.line.geometry.attributes.position;
   attr.setXYZ(0, meteorTail.x, meteorTail.y, meteorTail.z);
   attr.setXYZ(1, meteorHead.x, meteorHead.y, meteorHead.z);
   attr.needsUpdate = true;
-  streak.line.visible = streak.progress >= streak.delay;
+  const isVisible = streak.progress >= streak.delay;
+  streak.line.visible = isVisible;
+  streak.headSprite.visible = isVisible;
+  if (isVisible){
+    streak.headSprite.position.copy(meteorHead);
+    // 대기권 진입 말기(visibleProgress ~ 0.85)에서 순간 소멸 섬광(terminal flare)
+    const flare = Math.exp(-Math.pow((visibleProgress - 0.84) / 0.09, 2)) * 1.65;
+    const s = streak.baseHeadSize * (0.75 + 0.45 * tailScale + flare);
+    streak.headSprite.scale.set(s, s, 1);
+    streak.headSprite.material.opacity = Math.min(1, (0.4 + 0.6 * tailScale + flare * 0.5));
+  }
 }
 function resetMeteorStreaks(){
   updateMeteorBasis();
@@ -1755,6 +2259,9 @@ function resetMeteorStreaks(){
 }
 function updateMeteorShower(dt){
   if (!meteorShowerGroup.visible) return;
+  meteorShellUniforms.uTime.value = worldTime;
+  radiantRing1.rotation.z += dt * 0.8;
+  radiantRing2.rotation.z -= dt * 0.5;
   for (const streak of meteorStreaks){
     streak.progress += dt * streak.speed;
     if (streak.progress > 1){
@@ -1765,31 +2272,61 @@ function updateMeteorShower(dt){
     }
     writeMeteorStreak(streak);
   }
-  meteorAtmosphereMat.opacity = 0.11 + Math.sin(worldTime * 2.2) * 0.025;
 }
 resetMeteorStreaks();
 
 /* ============================================================
-   소행성대 — InstancedMesh
+   소행성대 — 비정형 암석 지오메트리 + 스펙트럼 분류별 색상 다양화
 ============================================================ */
 const beltRnd = mulberry32(2024);
+function makeAsteroidGeometry(){
+  const geo = new THREE.IcosahedronGeometry(1, 1);
+  const pos = geo.attributes.position;
+  const v = new THREE.Vector3();
+  for (let i = 0; i < pos.count; i++){
+    v.fromBufferAttribute(pos, i);
+    const n = v.clone().normalize();
+    const deform = 0.84
+      + 0.14 * Math.sin(n.x * 4.2 + 0.7) * Math.cos(n.y * 3.8 - 0.4)
+      + 0.09 * Math.sin(n.z * 6.5 + n.x * 3.1);
+    v.multiplyScalar(deform);
+    pos.setXYZ(i, v.x, v.y, v.z);
+  }
+  geo.computeVertexNormals();
+  return geo;
+}
 const belt = new THREE.InstancedMesh(
-  new THREE.IcosahedronGeometry(1, 0),
-  new THREE.MeshStandardMaterial({ color: 0x9a8f82, roughness: 1 }),
+  makeAsteroidGeometry(),
+  new THREE.MeshStandardMaterial({
+    color: 0xffffff, normalMap: moonNormalTexture, normalScale: new THREE.Vector2(0.85, 0.85),
+    roughness: 0.9, metalness: 0.12
+  }),
   CONFIG.asteroidCount);
 belt.instanceMatrix.setUsage(THREE.DynamicDrawUsage);
 const asteroids = [];
+const asteroidPalette = [
+  new THREE.Color(0x7c746c), // C-type (탄소질 어두운 회갈색)
+  new THREE.Color(0xa69483), // S-type (규소질 밝은 갈색)
+  new THREE.Color(0xb8aa9e), // M-type (금속질 회백색)
+  new THREE.Color(0x8f7e6e)
+];
+const tmpAstColor = new THREE.Color();
 for (let i = 0; i < CONFIG.asteroidCount; i++){
   asteroids.push({
     angle: beltRnd() * TAU,
     radius: mixn(CONFIG.asteroidBelt.rMin, CONFIG.asteroidBelt.rMax, beltRnd()),
     y: (beltRnd() - 0.5) * 2 * CONFIG.asteroidBelt.yJitter,
     w: TAU / (1500 + beltRnd() * 1200),       // rad / sim-day
-    s1: 0.05 + beltRnd() * 0.2, s2: 0.05 + beltRnd() * 0.2, s3: 0.05 + beltRnd() * 0.2,
+    s1: 0.06 + beltRnd() * 0.22, s2: 0.05 + beltRnd() * 0.20, s3: 0.06 + beltRnd() * 0.22,
     rx: beltRnd() * TAU, ry: beltRnd() * TAU, rz: beltRnd() * TAU,
     rsx: (beltRnd() - 0.5) * 1.4, rsy: (beltRnd() - 0.5) * 1.4, rsz: (beltRnd() - 0.5) * 1.4
   });
+  const baseC = asteroidPalette[i % asteroidPalette.length];
+  const shade = 0.82 + beltRnd() * 0.34;
+  tmpAstColor.copy(baseC).multiplyScalar(shade);
+  belt.setColorAt(i, tmpAstColor);
 }
+if (belt.instanceColor) belt.instanceColor.needsUpdate = true;
 sceneGroup.add(belt);
 const beltDummy = new THREE.Object3D();
 function updateBelt(days, dt){
@@ -1810,7 +2347,6 @@ function updateBelt(days, dt){
 /* ============================================================
    별 — 3 레이어 Points + 은하수 밴드
 ============================================================ */
-const starTex = makeStarSprite();
 const bandNormal = new THREE.Vector3(0.42, 1, 0.25).normalize();
 const starRnd = mulberry32(777);
 const starPointLayers = [];
@@ -1851,7 +2387,7 @@ function buildStarLayer(count, size){
 CONFIG.starLayers.forEach(l => starPointLayers.push(buildStarLayer(l.count, l.size)));
 
 /* ============================================================
-   혜성 — 태양 중심 공전 + 태양 반대 방향의 두 꼬리
+   혜성 — 태양 중심 케플러 공전 + 개별 조각 핵(67P 쌍엽 등) + 파라볼릭 코마 후드 + 곡선 분수 제트 + 다중 볼류메트릭 이온/먼지 꼬리
 ============================================================ */
 const cometOrbitLayer = new THREE.Group();
 sceneGroup.add(cometOrbitLayer);
@@ -1881,67 +2417,254 @@ function makeIrregularCometGeometry(seed, radius = 1, stretch = [1.18, 0.88, 1])
   return geometry;
 }
 
+const cometGeometryCache = new Map();
+function getCometNucleusGeometry(data){
+  const key = data?.key || 'halley';
+  if (cometGeometryCache.has(key)) return cometGeometryCache.get(key);
+
+  const seed = data?.surfaceSeed || 731;
+  const rnd = mulberry32(seed * 31 + 17);
+  // Pits / craters / sinkholes for realistic cometary topography
+  const craters = Array.from({ length: key === 'wild2' ? 14 : 9 }, () => {
+    const u = rnd() * 2 - 1, theta = rnd() * TAU;
+    const s = Math.sqrt(Math.max(0, 1 - u * u));
+    return {
+      dir: new THREE.Vector3(s * Math.cos(theta), u, s * Math.sin(theta)).normalize(),
+      cosR: Math.cos(0.22 + rnd() * (key === 'wild2' ? 0.28 : 0.20)),
+      depth: (key === 'wild2' ? 0.16 : 0.10) + rnd() * 0.08,
+      rim: key === 'wild2' ? 0.055 : 0.032
+    };
+  });
+
+  const geometry = new THREE.IcosahedronGeometry(1, 5);
+  const position = geometry.attributes.position;
+  const point = new THREE.Vector3();
+  const dir = new THREE.Vector3();
+  const phase = seed * 0.0137;
+
+  for (let i = 0; i < position.count; i++){
+    point.fromBufferAttribute(position, i);
+    dir.copy(point).normalize();
+
+    // Multi-frequency rocky crag & cliff displacement
+    const f1 = Math.sin(dir.x * 3.2 + phase) * Math.cos(dir.y * 2.9 - phase * 0.6)
+             + Math.sin(dir.z * 3.7 + phase * 1.1) * 0.8;
+    const f2 = Math.sin((dir.x * 6.4 + dir.y * 5.2 - dir.z * 4.8) + phase * 1.9) * 0.45;
+    const f3 = Math.cos((dir.x - dir.z) * 13.5 + dir.y * 11.2 + phase * 2.7) * 0.22;
+    const ridges = 1.0 - Math.abs(Math.sin(dir.x * 5.5 + dir.y * 4.2 - dir.z * 6.1 + phase));
+    let r = 0.92 + f1 * 0.065 + f2 * 0.04 + f3 * 0.018 + ridges * ridges * 0.055;
+
+    // Crater bowls & flat-floored sinkholes (Wild 2 / Tempel 1 / Halley)
+    for (const c of craters){
+      const d = dir.dot(c.dir);
+      if (d > c.cosR){
+        const t = (d - c.cosR) / (1 - c.cosR); // 0 at edge, 1 at center
+        if (t < 0.25){
+          // Raised crater rim
+          r += Math.sin((t / 0.25) * Math.PI) * c.rim;
+        } else {
+          // Steep wall & flat floor (cometary sinkhole morphology)
+          const bowl = Math.min(1, (t - 0.25) / 0.45);
+          r -= (bowl * bowl * (3 - 2 * bowl)) * c.depth;
+        }
+      }
+    }
+
+    point.copy(dir).multiplyScalar(r);
+
+    if (key === 'churyumov'){
+      // 67P/추류모프-게라시멘코: 로제타 탐사선이 촬영한 유명한 '오리 모양(Contact-Binary)' 쌍엽 핵 + 잘록한 목(Hathor 절벽)
+      point.x *= 1.48;
+      point.y *= 0.86;
+      point.z *= 0.88;
+      const xNorm = point.x / 1.48;
+      // Neck pinch around x = 0.08
+      const neckDist = (xNorm - 0.08) / 0.28;
+      const neckPinch = 1.0 - 0.56 * Math.exp(-neckDist * neckDist);
+      point.y *= neckPinch;
+      point.z *= neckPinch;
+      // Stratified cliff terraces along Hathor neck & lobes
+      const strata = Math.sin(point.x * 16.0 + point.z * 6.0) * 0.024;
+      point.y += strata;
+      if (xNorm > 0.08){
+        // Head lobe tilted upward (+Y) and slightly twisted (+Z) like 67P's small lobe
+        const headT = clamp01((xNorm - 0.08) / 0.92);
+        point.y += headT * 0.38;
+        point.z += headT * 0.10;
+        point.multiplyScalar(0.88);
+      } else {
+        // Larger flattened body lobe (Imhotep basin)
+        const bodyT = clamp01((-xNorm + 0.08) / 1.08);
+        point.y -= bodyT * 0.12;
+        point.z *= 1.06;
+      }
+    } else if (key === 'halley'){
+      // 1P/핼리: Giotto 탐사선이 관측한 길쭉한 땅콩/아보카도형 거대 암석·얼음 모놀리스 (15×8×8 km)
+      point.x *= 1.46;
+      point.y *= 0.78;
+      point.z *= 0.82;
+      const waist = 1.0 - 0.22 * Math.exp(-Math.pow((dir.x + 0.08) / 0.42, 2));
+      point.y *= waist;
+      point.z *= waist;
+      point.y += 0.12 * Math.sin(dir.x * 2.6 + 0.4);
+    } else if (key === 'tempel'){
+      // 9P/템펠 1: 층상 단구(Terraced Mesa)와 각진 능선, Deep Impact 충돌 분화구를 지닌 비대칭 다면체 핵
+      point.x *= 1.24;
+      point.y *= 0.90;
+      point.z *= 0.96;
+      const terrace = Math.round((point.y + dir.x * 0.25) * 9.0) / 9.0;
+      point.y = mixn(point.y, terrace, 0.32);
+    } else if (key === 'wild2'){
+      // 81P/빌트 2: Stardust가 관측한 편평한 타원체 위에 깎아지른 싱크홀 피트와 첨탑이 솟은 핵
+      point.x *= 1.16;
+      point.y *= 0.80;
+      point.z *= 1.12;
+    } else if (key === 'hale-bopp'){
+      // C/1995 O1 헤일-밥: 지름 60km의 거대하고 험준한 다중 산악형 얼음-암석 코어
+      point.x *= 1.22;
+      point.y *= 1.05;
+      point.z *= 1.14;
+      const crag = Math.pow(Math.abs(Math.sin(dir.x * 5.0) * Math.cos(dir.z * 5.0)), 1.6) * 0.12;
+      point.addScaledVector(dir, crag);
+    } else {
+      // C/2020 F3 니오와이즈: 깊은 열 균열 협곡을 지닌 어두운 비정형 암석 핵
+      point.x *= 1.20;
+      point.y *= 0.88;
+      point.z *= 0.94;
+      const canyon = Math.exp(-Math.pow((dir.y * 2.2 + dir.z * 0.8), 2) * 8.0) * 0.11;
+      point.addScaledVector(dir, -canyon);
+    }
+
+    position.setXYZ(i, point.x, point.y, point.z);
+  }
+  geometry.computeVertexNormals();
+  cometGeometryCache.set(key, geometry);
+  return geometry;
+}
+
 const cometTextureCache = new Map();
-function makeCometSurfaceTexture(seed){
+function makeCometSurfaceMaps(seed){
   if (cometTextureCache.has(seed)) return cometTextureCache.get(seed);
-  const W = 256, H = 128;
+  const W = 512, H = 256;
   const cv = document.createElement('canvas'); cv.width = W; cv.height = H;
   const ctx = cv.getContext('2d');
+  const emCv = document.createElement('canvas'); emCv.width = W; emCv.height = H;
+  const emCtx = emCv.getContext('2d');
+
   const noise = new TileNoise(seed);
+  const crackNoise = new TileNoise(seed * 13 + 7);
   const image = ctx.createImageData(W, H);
+  const emImg = emCtx.createImageData(W, H);
+
   for (let y = 0; y < H; y++){
     for (let x = 0; x < W; x++){
       const u = x / W, v = y / H;
-      const n = noise.fbm(u, v, 7, 4, 5) * 0.72 + noise.fbm(u, v, 19, 9, 3) * 0.28;
-      const value = 70 + n * 75;
-      const i = (y * W + x) * 4;
-      image.data[i] = value * 0.92;
-      image.data[i + 1] = value * 0.96;
-      image.data[i + 2] = value;
-      image.data[i + 3] = 255;
+      const base = noise.fbm(u, v, 6, 3, 5);
+      const detail = noise.fbm(u, v, 22, 11, 4);
+      const strata = 0.5 + 0.5 * Math.sin((u * 5.0 + v * 11.0 + base * 1.8) * Math.PI * 2);
+      // Ridged fracture network for active sublimation ice vents
+      const cVal = Math.abs(crackNoise.fbm(u, v, 10, 5, 4) - 0.5) * 2.0;
+      const iceVein = Math.pow(clamp01(1.0 - cVal * 4.8), 2.4) * smooth(0.62, 0.18, u);
+      const frostPatch = Math.pow(clamp01(detail * 1.35 - 0.52), 2.0) * 0.65;
+
+      // Dark carbon-silicate crust (charcoal-slate) + bright exposed water/CO2 ice patches
+      const rockLuma = 38 + base * 58 + detail * 28 + strata * 14;
+      const iceMix = clamp01(iceVein * 0.95 + frostPatch * 0.55);
+      const r = mixn(rockLuma * 0.90, 205, iceMix);
+      const g = mixn(rockLuma * 0.95, 238, iceMix);
+      const b = mixn(rockLuma * 1.04, 255, iceMix);
+
+      const idx = (y * W + x) * 4;
+      image.data[idx]     = Math.min(255, r) | 0;
+      image.data[idx + 1] = Math.min(255, g) | 0;
+      image.data[idx + 2] = Math.min(255, b) | 0;
+      image.data[idx + 3] = 255;
+
+      // Sublimation fissure glow map (strongest on sun-facing / fractured veins)
+      const em = clamp01(iceVein * 1.15 + frostPatch * 0.35);
+      emImg.data[idx]     = (em * 135) | 0;
+      emImg.data[idx + 1] = (em * 225) | 0;
+      emImg.data[idx + 2] = (em * 255) | 0;
+      emImg.data[idx + 3] = 255;
     }
   }
   ctx.putImageData(image, 0, 0);
+  emCtx.putImageData(emImg, 0, 0);
+
   const rnd = mulberry32(seed * 17 + 9);
-  for (let i = 0; i < 18; i++){
-    const x = rnd() * W, y = rnd() * H, r = 2 + rnd() * 8;
-    const gradient = ctx.createRadialGradient(x, y, r * 0.15, x, y, r);
-    gradient.addColorStop(0, 'rgba(15,18,22,.72)');
-    gradient.addColorStop(0.62, 'rgba(29,32,35,.42)');
-    gradient.addColorStop(0.78, 'rgba(155,160,164,.18)');
+  for (let i = 0; i < 34; i++){
+    const x = rnd() * W, y = rnd() * H, r = 3 + rnd() * 14;
+    const gradient = ctx.createRadialGradient(x, y, r * 0.12, x, y, r);
+    const hasIceFloor = rnd() < 0.32;
+    gradient.addColorStop(0, hasIceFloor ? 'rgba(185,235,255,.65)' : 'rgba(14,17,22,.82)');
+    gradient.addColorStop(0.58, 'rgba(26,30,36,.52)');
+    gradient.addColorStop(0.82, 'rgba(165,176,188,.28)');
     gradient.addColorStop(1, 'rgba(0,0,0,0)');
     ctx.fillStyle = gradient;
     ctx.fillRect(x - r, y - r, r * 2, r * 2);
+    if (hasIceFloor){
+      const eg = emCtx.createRadialGradient(x, y, 0, x, y, r * 0.55);
+      eg.addColorStop(0, 'rgba(150,240,255,0.85)');
+      eg.addColorStop(1, 'rgba(0,0,0,0)');
+      emCtx.fillStyle = eg;
+      emCtx.fillRect(x - r, y - r, r * 2, r * 2);
+    }
   }
-  const texture = new THREE.CanvasTexture(cv);
-  texture.colorSpace = THREE.SRGBColorSpace;
-  texture.wrapS = THREE.RepeatWrapping;
-  texture.anisotropy = Math.min(renderer.capabilities.getMaxAnisotropy(), 4);
-  cometTextureCache.set(seed, texture);
-  return texture;
+
+  const maxAniso = Math.min(renderer.capabilities.getMaxAnisotropy(), 4);
+  const map = new THREE.CanvasTexture(cv);
+  map.colorSpace = THREE.SRGBColorSpace;
+  map.wrapS = THREE.RepeatWrapping;
+  map.anisotropy = maxAniso;
+
+  const normalMap = makeNormalFromTexture(map, 3.2);
+  normalMap.wrapS = THREE.RepeatWrapping;
+  normalMap.anisotropy = maxAniso;
+
+  const emissiveMap = new THREE.CanvasTexture(emCv);
+  emissiveMap.colorSpace = THREE.SRGBColorSpace;
+  emissiveMap.wrapS = THREE.RepeatWrapping;
+
+  const bundle = { map, normalMap, emissiveMap };
+  cometTextureCache.set(seed, bundle);
+  return bundle;
 }
 
+const initialCometMaps = makeCometSurfaceMaps(731);
 const cometNucleusMaterial = new THREE.MeshStandardMaterial({
-  color:0xd0cfca, map:makeCometSurfaceTexture(731), roughness:1, metalness:0,
-  emissive:0x222a34, emissiveIntensity:0.24
+  color: 0xd8dce2,
+  map: initialCometMaps.map,
+  normalMap: initialCometMaps.normalMap,
+  normalScale: new THREE.Vector2(1.35, 1.35),
+  roughness: 0.86,
+  metalness: 0.08,
+  emissive: 0x5ad8ff,
+  emissiveMap: initialCometMaps.emissiveMap,
+  emissiveIntensity: 0.42
 });
 const cometNucleus = new THREE.Mesh(
-  makeIrregularCometGeometry(731, 1, [1.24, 0.86, 1]), cometNucleusMaterial);
+  getCometNucleusGeometry(COMET_DATA[0]), cometNucleusMaterial);
 cometNucleus.rotation.set(0.22, -0.38, 0.12);
 cometNucleusGroup.add(cometNucleus);
+
+// Sub-lobe / boulder talus collar kept in scene graph for raycast compatibility
 const cometSecondLobe = new THREE.Mesh(
-  makeIrregularCometGeometry(967, 0.74, [1.05, 0.9, 1]), cometNucleusMaterial);
-cometSecondLobe.position.set(0.88, -0.32, 0.12);
-cometSecondLobe.rotation.z = 0.28;
-cometSecondLobe.scale.set(0.92, 1, 0.94);
+  new THREE.IcosahedronGeometry(0.36, 2), cometNucleusMaterial);
+cometSecondLobe.position.set(0.12, -0.18, 0.24);
+cometSecondLobe.scale.set(1.15, 0.65, 0.85);
 cometSecondLobe.visible = false;
 cometNucleusGroup.add(cometSecondLobe);
-const cometFillLight = new THREE.PointLight(0x9acbff, 5.5, 28, 1.2);
-cometFillLight.position.set(2.5, 4.5, 8);
+
+// Dynamic Sunward Key Light + Cyan Coma Backlight on the Comet
+const cometFillLight = new THREE.PointLight(0xfff1d6, 7.5, 34, 1.1);
+cometFillLight.position.set(-5.5, 1.8, 2.2);
 cometModel.add(cometFillLight);
+const cometComaLight = new THREE.PointLight(0x7be0ff, 3.8, 26, 1.2);
+cometComaLight.position.set(3.5, -2.0, -3.0);
+cometModel.add(cometComaLight);
 
 const cometComaSprites = [
-  { size:5.5, opacity:0.22 }, { size:9, opacity:0.1 }, { size:14, opacity:0.04 }
+  { size:4.6, opacity:0.30 }, { size:8.5, opacity:0.14 }, { size:14.5, opacity:0.055 }
 ].map(({size, opacity}) => {
   const sprite = new THREE.Sprite(new THREE.SpriteMaterial({
     map:starTex, color:0xa7ecff, transparent:true, opacity,
@@ -1954,53 +2677,374 @@ const cometComaSprites = [
 
 const cometTailFrame = new THREE.Group();
 cometModel.add(cometTailFrame);
+
+/* --- 1. 3D 파라볼릭 코마 후드 & 태양풍 보우쇼크 셸 (Parabolic Coma Envelope) --- */
+const cometComaShell = (function makeParabolicComaShell(){
+  const geo = new THREE.SphereGeometry(1, 36, 28);
+  const pos = geo.attributes.position;
+  const v = new THREE.Vector3();
+  for (let i = 0; i < pos.count; i++){
+    v.fromBufferAttribute(pos, i);
+    // -X is sunward (compressed parabolic bow-shock hood), +X is anti-sunward (swept coma)
+    if (v.x < 0){
+      v.x *= 1.55;
+      const radial = 1.0 - 0.18 * Math.pow(-v.x / 1.55, 1.6);
+      v.y *= 1.68 * radial;
+      v.z *= 1.68 * radial;
+    } else {
+      const t = v.x; // 0 .. 1
+      v.x = t * 4.6;
+      const flare = 1.68 + t * 0.95;
+      v.y *= flare;
+      v.z *= flare;
+    }
+    pos.setXYZ(i, v.x, v.y, v.z);
+  }
+  geo.computeVertexNormals();
+  const uniforms = {
+    uColor: { value: new THREE.Color(0xa7ecff) },
+    uTime: { value: 0 },
+    uOpacity: { value: 0.34 }
+  };
+  const mat = new THREE.ShaderMaterial({
+    uniforms,
+    vertexShader: `
+      varying vec3 vLocalPos;
+      varying vec3 vNormal;
+      varying vec3 vViewDir;
+      void main(){
+        vLocalPos = position;
+        vNormal = normalize(normalMatrix * normal);
+        vec4 mv = modelViewMatrix * vec4(position, 1.0);
+        vViewDir = -normalize(mv.xyz);
+        gl_Position = projectionMatrix * mv;
+      }`,
+    fragmentShader: NOISE_GLSL + `
+      uniform vec3 uColor;
+      uniform float uTime;
+      uniform float uOpacity;
+      varying vec3 vLocalPos;
+      varying vec3 vNormal;
+      varying vec3 vViewDir;
+      void main(){
+        float ndv = abs(dot(normalize(vNormal), normalize(vViewDir)));
+        float rim = pow(clamp(1.0 - ndv, 0.0, 1.0), 1.65);
+        float core = pow(ndv, 1.4) * 0.45;
+        // Sunward bow-shock brightening (-X) and smooth tailward fade (+X)
+        float bowShock = smoothstep(1.5, -1.35, vLocalPos.x) * 0.55 + 0.45;
+        float tailFade = 1.0 - smoothstep(1.2, 4.5, vLocalPos.x);
+        float n = 0.84 + 0.16 * snoise(vLocalPos * 1.15 - vec3(uTime * 1.6, 0.0, 0.0));
+        float alpha = (rim * 0.78 + core) * bowShock * tailFade * n * uOpacity;
+        vec3 col = mix(uColor, vec3(0.92, 0.99, 1.0), bowShock * 0.38);
+        gl_FragColor = vec4(col, alpha);
+      }`,
+    transparent: true, blending: THREE.AdditiveBlending, side: THREE.DoubleSide, depthWrite: false
+  });
+  const mesh = new THREE.Mesh(geo, mat);
+  cometTailFrame.add(mesh);
+  return { mesh, uniforms };
+})();
+
+/* --- 2. 볼류메트릭 혜성 꼬리 시스템 (다중 셸 직선 플라스마 이온 꼬리 + 궤도 곡선 먼지 꼬리 + 이온 광선 팬) --- */
+function makeVolumetricTailMesh(kind, layerScale = 1.0){
+  const isDust = kind === 'dust';
+  const length = (isDust ? 18.5 : 23.0) * layerScale;
+  // Open cylinder parameterized from t = 0 (inside coma at x = -0.35) to t = 1 (far tail tip)
+  const geo = new THREE.CylinderGeometry(1, 1, 1, 36, 52, true);
+  const pos = geo.attributes.position;
+  const uv = geo.attributes.uv;
+  for (let i = 0; i < pos.count; i++){
+    // CylinderGeometry uv.y is 0 at bottom (-0.5) and 1 at top (+0.5)
+    const p = uv.getY(i); // 0 at coma origin, 1 at far tail end
+    const theta = uv.getX(i) * TAU;
+    const cy = Math.sin(theta);
+    const cz = Math.cos(theta);
+
+    const x = -0.35 + p * length;
+    let y, z;
+    if (isDust){
+      // Broad golden-amber dust tail: starts smoothly around coma (r ~ 0.62) and fans/curves along +Z (orbital lag)
+      const rY = (0.58 + Math.pow(p, 0.88) * 1.95) * (0.72 + 0.28 * layerScale);
+      const rZ = (0.65 + Math.pow(p, 1.05) * 3.10) * (0.72 + 0.28 * layerScale);
+      const bendZ = Math.pow(p, 1.72) * 4.25;
+      // Asymmetric synchrone fanning toward +Z
+      const asymZ = cz > 0 ? cz * rZ * 1.25 : cz * rZ * 0.68;
+      y = cy * rY;
+      z = asymZ + bendZ;
+    } else {
+      // Collimated cyan-blue CO+ ion plasma tail: straight anti-sunward (+X)
+      const rIon = (0.36 + Math.pow(p, 0.74) * 1.05) * (0.62 + 0.38 * layerScale);
+      y = cy * rIon;
+      z = cz * rIon;
+    }
+    pos.setXYZ(i, x, y, z);
+  }
+  geo.computeVertexNormals();
+
+  const uniforms = {
+    uColor: { value: new THREE.Color(isDust ? 0xffd096 : 0x75dcff) },
+    uTime: { value: 0 },
+    uOpacity: { value: isDust ? 0.34 : 0.46 }
+  };
+  const mat = new THREE.ShaderMaterial({
+    uniforms,
+    vertexShader: `
+      varying vec2 vUv;
+      varying vec3 vLocalPos;
+      varying vec3 vNormal;
+      varying vec3 vViewDir;
+      void main(){
+        vUv = uv;
+        vLocalPos = position;
+        vNormal = normalize(normalMatrix * normal);
+        vec4 mv = modelViewMatrix * vec4(position, 1.0);
+        vViewDir = -normalize(mv.xyz);
+        gl_Position = projectionMatrix * mv;
+      }`,
+    fragmentShader: NOISE_GLSL + `
+      uniform vec3 uColor;
+      uniform float uTime;
+      uniform float uOpacity;
+      varying vec2 vUv;
+      varying vec3 vLocalPos;
+      varying vec3 vNormal;
+      varying vec3 vViewDir;
+      void main(){
+        float along = vUv.y; // 0 at coma, 1 at far tip
+        float headFade = smoothstep(0.0, 0.09, along);
+        float tailFade = pow(clamp(1.0 - along, 0.0, 1.0), ${isDust ? '1.35' : '1.18'});
+        float axial = headFade * tailFade;
+
+        float ndv = abs(dot(normalize(vNormal), normalize(vViewDir)));
+        float edgeSoft = pow(clamp(ndv, 0.0, 1.0), ${isDust ? '1.15' : '1.45'});
+
+        ${isDust ? `
+          // Synchrone dust striae bands + warm golden-cream scattering
+          float striae = 0.84 + 0.16 * sin(vUv.x * 25.13 + along * 11.0 - uTime * 1.4);
+          float turb = 0.88 + 0.12 * snoise(vec3(along * 4.5 - uTime * 0.55, vUv.x * 6.0, 0.7));
+          vec3 col = mix(vec3(1.0, 0.96, 0.88), uColor, smoothstep(0.0, 0.38, along));
+          float alpha = axial * edgeSoft * striae * turb * uOpacity;
+        ` : `
+          // Fast solar-wind plasma streamers + Alfvén wave knots
+          float rays = 0.72 + 0.28 * pow(0.5 + 0.5 * sin(vUv.x * 37.699 + sin(along * 8.0 - uTime * 3.8) * 1.2), 2.0);
+          float knots = 0.82 + 0.18 * snoise(vec3(along * 6.5 - uTime * 2.6, vUv.x * 9.0, uTime * 0.4));
+          vec3 col = mix(vec3(0.86, 0.98, 1.0), uColor, smoothstep(0.0, 0.28, along));
+          float alpha = axial * edgeSoft * rays * knots * uOpacity;
+        `}
+        gl_FragColor = vec4(col, alpha);
+      }`,
+    transparent: true, blending: THREE.AdditiveBlending, side: THREE.DoubleSide, depthWrite: false
+  });
+  const mesh = new THREE.Mesh(geo, mat);
+  cometTailFrame.add(mesh);
+  return { mesh, uniforms };
+}
+const cometDustVolume = makeVolumetricTailMesh('dust', 1.0);
+const cometDustCoreVolume = makeVolumetricTailMesh('dust', 0.62);
+const cometIonVolume = makeVolumetricTailMesh('ion', 1.0);
+const cometIonCoreVolume = makeVolumetricTailMesh('ion', 0.52);
+
+// 태양 방향(-X)에서 분출되어 태양 복사압에 의해 뒤쪽(+X)으로 휘어지는 분수형 가스 제트 (Curved Outgassing Fountain Jets)
+const cometJetsGroup = new THREE.Group();
+cometTailFrame.add(cometJetsGroup);
+const cometJetUniforms = {
+  uColor: { value: new THREE.Color(0xcff6ff) },
+  uTime: { value: 0 },
+  uActivity: { value: 0.85 }
+};
+const cometJetMaterial = new THREE.ShaderMaterial({
+  uniforms: cometJetUniforms,
+  vertexShader: `
+    varying vec2 vUv;
+    varying vec3 vNormal;
+    varying vec3 vViewDir;
+    void main(){
+      vUv = uv;
+      vNormal = normalize(normalMatrix * normal);
+      vec4 mv = modelViewMatrix * vec4(position, 1.0);
+      vViewDir = -normalize(mv.xyz);
+      gl_Position = projectionMatrix * mv;
+    }`,
+  fragmentShader: `
+    uniform vec3 uColor;
+    uniform float uTime;
+    uniform float uActivity;
+    varying vec2 vUv;
+    varying vec3 vNormal;
+    varying vec3 vViewDir;
+    void main(){
+      float s = vUv.y; // 0 at surface vent nozzle, 1 at expanding plume end
+      float fade = smoothstep(0.0, 0.08, s) * pow(clamp(1.0 - s, 0.0, 1.0), 1.55);
+      float edge = pow(clamp(abs(dot(normalize(vNormal), normalize(vViewDir))), 0.0, 1.0), 1.15);
+      float pulse = 0.78 + 0.22 * sin(vUv.x * 18.85 + s * 14.0 - uTime * 9.5);
+      vec3 col = mix(vec3(1.0), uColor, smoothstep(0.0, 0.35, s));
+      gl_FragColor = vec4(col, fade * edge * pulse * uActivity);
+    }`,
+  transparent: true, blending: THREE.AdditiveBlending, side: THREE.DoubleSide, depthWrite: false
+});
+function makeCurvedJetGeometry(spreadAngleY, spreadAngleZ, length = 2.4){
+  const geo = new THREE.CylinderGeometry(1, 1, 1, 16, 20, true);
+  const pos = geo.attributes.position;
+  const uv = geo.attributes.uv;
+  for (let i = 0; i < pos.count; i++){
+    const s = uv.getY(i); // 0 at nucleus vent, 1 at outer plume
+    const theta = uv.getX(i) * TAU;
+    // Nozzle starts narrow (0.045) at surface and flares out (0.48) as gas expands into vacuum
+    const r = 0.045 + Math.pow(s, 0.85) * 0.46;
+    // Fountain trajectory: erupts sunward (-X) and radially, then bends back (+X) under radiation pressure
+    const cx = -0.62 - Math.sin(s * Math.PI * 0.65) * 0.95 + s * s * 1.65;
+    const cy = Math.sin(spreadAngleY) * (0.28 + s * length * 0.65) + Math.sin(theta) * r;
+    const cz = Math.sin(spreadAngleZ) * (0.28 + s * length * 0.65) + Math.cos(theta) * r;
+    pos.setXYZ(i, cx, cy, cz);
+  }
+  geo.computeVertexNormals();
+  return geo;
+}
+const cometJetMeshes = [
+  [0.42, 0.18, 2.5],
+  [-0.38, 0.32, 2.3],
+  [0.12, -0.46, 2.6],
+  [-0.24, -0.28, 2.1],
+  [0.55, -0.15, 2.2]
+].map(([ay, az, len]) => {
+  const jMesh = new THREE.Mesh(makeCurvedJetGeometry(ay, az, len), cometJetMaterial);
+  cometJetsGroup.add(jMesh);
+  return jMesh;
+});
+
 function makeCometTail(count, kind, seed){
   const rnd = mulberry32(seed);
+  const isDust = kind === 'dust';
   const positions = new Float32Array(count * 3);
+  const alphas = new Float32Array(count);
+  const sizes = new Float32Array(count);
   const states = [];
   for (let i = 0; i < count; i++){
+    const progress = rnd();
+    const isJetEjecta = i < count * 0.16; // 16% erupt from sunward geysers before sweeping into tail
     states.push({
-      progress:rnd(), speed:0.055 + rnd() * 0.07,
-      a:(rnd() - 0.5) * 2, b:(rnd() - 0.5) * 2,
-      phase:rnd() * TAU
+      progress,
+      speed: (isDust ? 0.048 : 0.095) + rnd() * (isDust ? 0.055 : 0.11),
+      a: (rnd() - 0.5) * 2,
+      b: (rnd() - 0.5) * 2,
+      phase: rnd() * TAU,
+      isJetEjecta
     });
+    sizes[i] = (isDust ? 0.34 : 0.26) * (0.55 + rnd() * 1.15);
+    alphas[i] = 1.0;
   }
   const geometry = new THREE.BufferGeometry();
   const position = new THREE.BufferAttribute(positions, 3);
+  const alphaAttr = new THREE.BufferAttribute(alphas, 1);
   position.setUsage(THREE.DynamicDrawUsage);
+  alphaAttr.setUsage(THREE.DynamicDrawUsage);
   geometry.setAttribute('position', position);
-  const material = new THREE.PointsMaterial({
-    size:kind === 'dust' ? 0.42 : 0.3, map:starTex, color:0xffffff,
-    transparent:true, opacity:kind === 'dust' ? 0.5 : 0.66,
-    blending:THREE.AdditiveBlending, depthWrite:false, sizeAttenuation:true
+  geometry.setAttribute('aAlpha', alphaAttr);
+  geometry.setAttribute('aSize', new THREE.BufferAttribute(sizes, 1));
+
+  const material = new THREE.ShaderMaterial({
+    uniforms: {
+      uMap: { value: starTex },
+      uColor: { value: new THREE.Color(isDust ? 0xffd096 : 0x75dcff) },
+      uOpacity: { value: isDust ? 0.65 : 0.78 },
+      uScale: { value: innerHeight * 0.5 }
+    },
+    vertexShader: `
+      attribute float aAlpha;
+      attribute float aSize;
+      uniform float uScale;
+      varying float vAlpha;
+      void main(){
+        vAlpha = aAlpha;
+        vec4 mv = modelViewMatrix * vec4(position, 1.0);
+        gl_PointSize = clamp(aSize * (uScale / max(-mv.z, 0.5)), 1.5, 28.0);
+        gl_Position = projectionMatrix * mv;
+      }`,
+    fragmentShader: `
+      uniform sampler2D uMap;
+      uniform vec3 uColor;
+      uniform float uOpacity;
+      varying float vAlpha;
+      void main(){
+        vec4 tex = texture2D(uMap, gl_PointCoord);
+        vec3 col = mix(uColor, vec3(1.0), tex.r * 0.35);
+        gl_FragColor = vec4(col, tex.a * vAlpha * uOpacity);
+      }`,
+    transparent: true,
+    blending: THREE.AdditiveBlending,
+    depthWrite: false
   });
   const points = new THREE.Points(geometry, material);
   points.frustumCulled = false;
   cometTailFrame.add(points);
-  return { kind, points, states, position, length:kind === 'dust' ? 13 : 16 };
+  return {
+    kind, points, states, position, alphaAttr,
+    length: isDust ? 17.5 : 22.0,
+    setColor(hex){ material.uniforms.uColor.value.setHex(hex); },
+    setOpacity(val){ material.uniforms.uOpacity.value = val; }
+  };
 }
 
-const cometDustTail = makeCometTail(reduceMotion ? 100 : 280, 'dust', 2301);
-const cometIonTail = makeCometTail(reduceMotion ? 70 : 180, 'ion', 4417);
-function updateCometTail(tail, dt){
+const cometDustTail = makeCometTail(reduceMotion ? 160 : 440, 'dust', 2301);
+const cometIonTail = makeCometTail(reduceMotion ? 110 : 300, 'ion', 4417);
+function updateCometTail(tail, dt, time = 0){
+  const isDust = tail.kind === 'dust';
   tail.states.forEach((particle, index) => {
     particle.progress = (particle.progress + dt * particle.speed) % 1;
     const p = particle.progress;
-    const spread = 0.05 + p * (tail.kind === 'dust' ? 0.92 : 0.3);
-    const x = 0.72 + p * tail.length;
-    const y = particle.a * spread + Math.sin(particle.phase + p * 9) * spread * 0.16;
-    const z = particle.b * spread + (tail.kind === 'dust' ? p * p * 2.2 : p * 0.04);
+    let x, y, z;
+    if (particle.isJetEjecta && p < 0.18){
+      // Sunward geyser fountain arc turning back into the coma
+      const jp = p / 0.18;
+      x = -0.65 - Math.sin(jp * Math.PI) * 0.85 + jp * 0.95;
+      const r = 0.12 + jp * 0.85;
+      y = particle.a * r;
+      z = particle.b * r;
+    } else {
+      const tp = particle.isJetEjecta ? (p - 0.18) / 0.82 : p;
+      const spread = 0.18 + Math.pow(tp, 0.88) * (isDust ? 1.85 : 0.72);
+      x = -0.15 + tp * tail.length;
+      y = particle.a * spread + Math.sin(particle.phase + tp * 10.0) * spread * 0.14;
+      if (isDust){
+        const asym = particle.b > 0 ? particle.b * spread * 1.35 : particle.b * spread * 0.65;
+        z = asym + Math.pow(tp, 1.72) * 4.25;
+      } else {
+        z = particle.b * spread + Math.cos(particle.phase + tp * 12.0) * 0.08;
+      }
+    }
     tail.position.setXYZ(index, x, y, z);
+    const fadeIn = smooth(0.0, 0.08, p);
+    const fadeOut = Math.pow(clamp01(1.0 - p), 1.45);
+    const twinkle = 0.78 + 0.22 * Math.sin(time * 5.0 + particle.phase);
+    tail.alphaAttr.setX(index, fadeIn * fadeOut * twinkle);
   });
   tail.position.needsUpdate = true;
+  tail.alphaAttr.needsUpdate = true;
 }
-updateCometTail(cometDustTail, 0);
-updateCometTail(cometIonTail, 0);
+updateCometTail(cometDustTail, 0, 0);
+updateCometTail(cometIonTail, 0, 0);
 
 const cometOrbitLabel = makeLabel('혜성 · 1P/Halley', 'label comet-label');
 cometOrbitLabel.position.set(0, 2.3, 0);
 cometModel.add(cometOrbitLabel);
 labelObjs.push(cometOrbitLabel);
+
+// 혜성 근접 학습용 3D 부위별 구조 라벨 (핵 · 코마 · 먼지 꼬리 · 이온 꼬리)
+const cometPartLabels = {
+  nucleus: makeLabel('핵 (얼음·암석 본체)', 'label comet-label sunward'),
+  coma: makeLabel('코마 (기체·먼지 대기)', 'label comet-label'),
+  dust: makeLabel('먼지 꼬리 (궤도 곡선)', 'label comet-label dust'),
+  ion: makeLabel('이온 꼬리 (태양풍 직선)', 'label comet-label ion')
+};
+cometPartLabels.nucleus.position.set(-0.85, -1.45, 0);
+cometPartLabels.coma.position.set(-0.4, 2.55, 1.15);
+cometPartLabels.dust.position.set(8.2, 0.85, 2.65);
+cometPartLabels.ion.position.set(10.8, -0.95, 0.05);
+Object.values(cometPartLabels).forEach(lbl => {
+  lbl.visible = false;
+  cometTailFrame.add(lbl);
+});
+let highlightedCometPart = null;
 
 let cometOrbitLine = null;
 let cometOrbitPhase = 1.2;
@@ -2009,6 +3053,11 @@ let selectedCometVisual = COMET_DATA[0];
 const cometOrbitXAxis = new THREE.Vector3(1, 0, 0);
 const cometOrbitYAxis = new THREE.Vector3(0, 1, 0);
 const cometAwayFromSun = new THREE.Vector3(1, 0, 0);
+const cometTailYAxis = new THREE.Vector3(0, 1, 0);
+const cometTailZAxis = new THREE.Vector3(0, 0, 1);
+const cometNextPosTmp = new THREE.Vector3();
+const cometPrevPosTmp = new THREE.Vector3();
+const cometBasisMat = new THREE.Matrix4();
 const cometOrbitViewSphere = new THREE.Sphere(new THREE.Vector3(), 80);
 const cometOrbitViewNormal = new THREE.Vector3(0, 1, 0);
 
@@ -2045,14 +3094,33 @@ function rebuildCometOrbit(data){
     .applyAxisAngle(cometOrbitYAxis, THREE.MathUtils.degToRad(data.visualOrbit.yaw))
     .normalize();
   const orbit = data.visualOrbit;
-  const targetRadius = THREE.MathUtils.clamp(48, orbit.a * (1 - orbit.e) + 3, orbit.a * (1 + orbit.e) - 3);
+  const targetRadius = THREE.MathUtils.clamp(44, orbit.a * (1 - orbit.e) + 3, orbit.a * (1 + orbit.e) - 3);
   const cosE = THREE.MathUtils.clamp((1 - targetRadius / orbit.a) / orbit.e, -1, 1);
   cometOrbitPhase = Math.acos(cosE);
 }
 function setOrbitingCometPosition(){
   setCometOrbitPoint(selectedCometVisual, cometOrbitPhase, cometModel.position);
   cometAwayFromSun.copy(cometModel.position).normalize();
-  cometTailFrame.quaternion.setFromUnitVectors(cometOrbitXAxis, cometAwayFromSun);
+
+  // Compute true orbital velocity tangent so +X is anti-sunward (ion tail) and +Z is trailing orbital lag (dust tail)
+  const dirSign = selectedCometVisual.visualOrbit.retrograde ? -1 : 1;
+  const dE = 0.015 * dirSign;
+  setCometOrbitPoint(selectedCometVisual, cometOrbitPhase + dE, cometNextPosTmp);
+  setCometOrbitPoint(selectedCometVisual, cometOrbitPhase - dE, cometPrevPosTmp);
+  // Trailing vector (-velocity) projected perpendicular to anti-solar vector (+X)
+  cometTailZAxis.subVectors(cometPrevPosTmp, cometNextPosTmp);
+  cometTailZAxis.addScaledVector(cometAwayFromSun, -cometTailZAxis.dot(cometAwayFromSun));
+  if (cometTailZAxis.lengthSq() < 1e-6) cometTailZAxis.set(0, 0, 1);
+  else cometTailZAxis.normalize();
+
+  cometTailYAxis.crossVectors(cometTailZAxis, cometAwayFromSun).normalize();
+  cometTailZAxis.crossVectors(cometAwayFromSun, cometTailYAxis).normalize();
+  cometBasisMat.makeBasis(cometAwayFromSun, cometTailYAxis, cometTailZAxis);
+  cometTailFrame.quaternion.setFromRotationMatrix(cometBasisMat);
+
+  // Position sunward key light toward the Sun (-cometAwayFromSun)
+  cometFillLight.position.copy(cometAwayFromSun).multiplyScalar(-5.5).addScaledVector(cometTailYAxis, 1.6);
+  cometComaLight.position.copy(cometAwayFromSun).multiplyScalar(3.2).addScaledVector(cometTailZAxis, 1.4);
 }
 
 const cometBody = {
@@ -2065,48 +3133,88 @@ cometSecondLobe.userData.body = cometBody;
 function applyCometVisual(data){
   selectedCometVisual = data;
   cometBody.data = data;
-  const visualScale = 0.72 + Math.log10(Math.max(data.nucleusKm, 1.5)) * 0.22;
+  const visualScale = 0.78 + Math.log10(Math.max(data.nucleusKm, 1.5)) * 0.22;
   cometNucleusGroup.scale.setScalar(visualScale);
-  cometBody.radius = 1.35 * visualScale;
-  cometNucleusMaterial.map = makeCometSurfaceTexture(data.surfaceSeed);
+  cometBody.radius = 1.38 * visualScale;
+
+  cometNucleus.geometry = getCometNucleusGeometry(data);
+  const surfMaps = makeCometSurfaceMaps(data.surfaceSeed);
+  cometNucleusMaterial.map = surfMaps.map;
+  cometNucleusMaterial.normalMap = surfMaps.normalMap;
+  cometNucleusMaterial.emissiveMap = surfMaps.emissiveMap;
+  cometNucleusMaterial.emissive.setHex(data.ionColor);
   cometNucleusMaterial.needsUpdate = true;
-  cometNucleusGroup.rotation.set(0.18, -0.38, 0.1);
-  cometNucleus.position.set(data.key === 'churyumov' ? -0.42 : 0, data.key === 'churyumov' ? 0.14 : 0, 0);
+
+  cometNucleusGroup.rotation.set(0.18, -0.32, 0.08);
+  cometNucleus.position.set(0, 0, 0);
   cometSecondLobe.visible = data.key === 'churyumov';
+
   cometComaSprites.forEach(sprite => sprite.material.color.setHex(data.comaColor));
-  cometDustTail.points.material.color.setHex(data.dustColor);
-  cometIonTail.points.material.color.setHex(data.ionColor);
+  cometComaShell.uniforms.uColor.value.setHex(data.comaColor);
+  cometComaLight.color.setHex(data.comaColor);
+  cometJetUniforms.uColor.value.setHex(data.comaColor);
+
+  cometDustTail.setColor(data.dustColor);
+  cometIonTail.setColor(data.ionColor);
+  cometDustVolume.uniforms.uColor.value.setHex(data.dustColor);
+  cometDustCoreVolume.uniforms.uColor.value.setHex(data.dustColor).lerp(new THREE.Color(0xffffff), 0.28);
+  cometIonVolume.uniforms.uColor.value.setHex(data.ionColor);
+  cometIonCoreVolume.uniforms.uColor.value.setHex(data.ionColor).lerp(new THREE.Color(0xffffff), 0.35);
+
   cometVisualActivity = data.activity;
   cometOrbitLabel.element.textContent = `혜성 · ${data.designation}`;
-  cometOrbitLabel.position.y = cometBody.radius + 1.15;
+  cometOrbitLabel.position.y = cometBody.radius + 1.25;
   rebuildCometOrbit(data);
   setOrbitingCometPosition();
 }
 function updateCometShowcase(dt){
   if (!sceneGroup.visible) return;
+  const distance = cometModel.position.length();
+  const proximity = 1 - THREE.MathUtils.clamp((distance - 12) / 115, 0, 0.78);
+  const activity = cometVisualActivity * (0.38 + proximity * 0.68);
+
   if (!reduceMotion){
     if (timeScale !== 0){
-      const direction = selectedCometVisual.visualOrbit.retrograde ? -1 : 1;
-      const orbitSpeed = 0.12 + Math.log10(timeScale + 1) * 0.04;
-      cometOrbitPhase = (cometOrbitPhase + direction * dt * orbitSpeed + TAU) % TAU;
+      const orbit = selectedCometVisual.visualOrbit;
+      const direction = orbit.retrograde ? -1 : 1;
+      const baseRate = 0.085 + Math.log10(timeScale + 1) * 0.032;
+      // Kepler's 2nd Law: dE/dt = n / (1 - e cos E), clamped for smooth close-up inspection
+      const keplerBoost = THREE.MathUtils.clamp(1 / Math.max(0.24, 1 - orbit.e * Math.cos(cometOrbitPhase)), 0.45, 2.4);
+      cometOrbitPhase = (cometOrbitPhase + direction * dt * baseRate * keplerBoost + TAU) % TAU;
       setOrbitingCometPosition();
     }
-    cometNucleusGroup.rotation.y += dt * 0.22;
-    cometNucleusGroup.rotation.z += dt * 0.045;
-    updateCometTail(cometDustTail, dt);
-    updateCometTail(cometIonTail, dt);
+    cometNucleusGroup.rotation.y += dt * 0.28;
+    cometNucleusGroup.rotation.z += dt * 0.06;
+    updateCometTail(cometDustTail, dt * (0.85 + activity * 0.4), worldTime);
+    updateCometTail(cometIonTail, dt * (0.95 + activity * 0.5), worldTime);
+    cometComaShell.uniforms.uTime.value = worldTime;
+    cometDustVolume.uniforms.uTime.value = worldTime;
+    cometDustCoreVolume.uniforms.uTime.value = worldTime * 1.15;
+    cometIonVolume.uniforms.uTime.value = worldTime;
+    cometIonCoreVolume.uniforms.uTime.value = worldTime * 1.25;
+    cometJetUniforms.uTime.value = worldTime;
   }
-  const distance = cometModel.position.length();
-  const proximity = 1 - THREE.MathUtils.clamp((distance - 12) / 120, 0, 0.75);
-  const activity = cometVisualActivity * (0.35 + proximity * 0.65);
-  const pulse = reduceMotion ? 1 : 1 + Math.sin(worldTime * 1.35) * 0.035;
+
+  const pulse = reduceMotion ? 1 : 1 + Math.sin(worldTime * 1.6) * 0.04;
+  const comaBoost = highlightedCometPart === 'coma' ? 1.55 : 1;
+  const dustBoost = highlightedCometPart === 'dust' ? 1.65 : 1;
+  const ionBoost = highlightedCometPart === 'ion' ? 1.65 : 1;
+  const tailScale = 0.78 + activity * 0.36;
+  cometTailFrame.scale.set(tailScale, 0.85 + activity * 0.22, 0.85 + activity * 0.25);
+
   cometComaSprites.forEach((sprite, index) => {
-    const base = [5.5, 9, 14][index] * (0.78 + activity * 0.3);
+    const base = [4.6, 8.5, 14.5][index] * (0.78 + activity * 0.32) * (highlightedCometPart === 'coma' ? 1.18 : 1);
     sprite.scale.set(base * pulse, base * pulse, 1);
-    sprite.material.opacity = [0.22, 0.1, 0.04][index] * (0.55 + activity * 0.55);
+    sprite.material.opacity = Math.min(0.88, [0.30, 0.14, 0.055][index] * (0.58 + activity * 0.55) * comaBoost);
   });
-  cometDustTail.points.material.opacity = 0.2 + activity * 0.34;
-  cometIonTail.points.material.opacity = 0.3 + activity * 0.42;
+  cometComaShell.uniforms.uOpacity.value = Math.min(0.85, (0.20 + activity * 0.24) * comaBoost);
+  cometDustTail.setOpacity(Math.min(0.95, (0.32 + activity * 0.42) * dustBoost));
+  cometIonTail.setOpacity(Math.min(0.95, (0.42 + activity * 0.48) * ionBoost));
+  cometDustVolume.uniforms.uOpacity.value = (0.18 + activity * 0.24) * dustBoost;
+  cometDustCoreVolume.uniforms.uOpacity.value = (0.24 + activity * 0.30) * dustBoost;
+  cometIonVolume.uniforms.uOpacity.value = (0.22 + activity * 0.30) * ionBoost;
+  cometIonCoreVolume.uniforms.uOpacity.value = (0.32 + activity * 0.38) * ionBoost;
+  cometJetUniforms.uActivity.value = (0.22 + activity * 0.38) * (highlightedCometPart === 'nucleus' ? 1.45 : 1);
 }
 applyCometVisual(COMET_DATA[0]);
 
@@ -2188,8 +3296,9 @@ scene.add(cmp.group);
     lb.position.set(edge, -Math.max(r, 0.06) - 0.22, 0);
     lb.visible = false;
     cmp.group.add(lb); cmp.labels.push(lb);
-    if (d.ring){ // 토성 고리 (비율 축소)
-      const ri = r * 1.24, ro = r * 2.27;
+    if (d.ring){ // 토성·천왕성 고리 (비율 축소)
+      const isUranusRing = Boolean(d.ring.uranus);
+      const ri = r * (isUranusRing ? 1.45 : 1.24), ro = r * (isUranusRing ? 1.88 : 2.27);
       const geo = new THREE.RingGeometry(ri, ro, 96, 1);
       const pos = geo.attributes.position, uv = geo.attributes.uv;
       const v3 = new THREE.Vector3();
@@ -2199,8 +3308,9 @@ scene.add(cmp.group);
         uv.setXY(i, (rr - ri) / (ro - ri), 0.5);
       }
       const ring = new THREE.Mesh(geo, new THREE.MeshBasicMaterial({
-        map: ringTexture, transparent: true, side: THREE.DoubleSide, depthWrite: false }));
-      ring.rotation.x = -Math.PI / 2;
+        map: isUranusRing ? uranusRingTexture : ringTexture,
+        transparent: true, side: THREE.DoubleSide, depthWrite: false }));
+      ring.rotation.x = isUranusRing ? THREE.MathUtils.degToRad(97.8 - 90) : -Math.PI / 2;
       ring.position.copy(m.position);
       cmp.group.add(ring);
     }
@@ -2274,11 +3384,6 @@ function ensureEarthTextures(){
 /* ============================================================
    상태
 ============================================================ */
-let timeScale = CONFIG.defaultSpeed;
-let worldTime = 0;
-let elapsedDays = 0;
-let lastTimeUi = 0;
-let hovered = null;
 const raycaster = new THREE.Raycaster();
 const pointerNDC = new THREE.Vector2(-10, -10);
 const pickTargets = [sunMesh, ...planetBodies.map(b => b.mesh), cometNucleus, cometSecondLobe];
@@ -2294,6 +3399,22 @@ let followBody = null;
 const lastBodyPos = new THREE.Vector3();
 const tmpV = new THREE.Vector3();
 const bodyWorldPos = (b, out) => b.group.getWorldPosition(out);
+
+function syncFollowHud(){
+  if (!ui.followHud) return;
+  const activeBody = followBody || flight.body;
+  const active = Boolean(activeBody) && !cmp.active && !scenarioMode?.active;
+  ui.followHud.classList.toggle('hidden', !active);
+  ui.followHud.setAttribute('aria-hidden', String(!active));
+  if (!active) return;
+  const name = activeBody === cometBody
+    ? `${cometBody.data.nameKo} (${cometBody.data.designation})`
+    : activeBody.data?.nameKo || '천체';
+  ui.followTargetName.textContent = `${name} 추적 중`;
+  const hasMoons = Boolean(activeBody.moons && activeBody.moons.length > 0);
+  ui.btnFollowMoons.style.display = hasMoons ? '' : 'none';
+}
+
 function updatePlanetLod(){
   const threshold = activeQuality.id === 'high' ? 0.012
     : activeQuality.id === 'balanced' ? 0.024 : 0.045;
@@ -2325,6 +3446,7 @@ function startFlight(p1, t1, opts = {}){
   flight.t = 0;
   flight.active = true;
   controls.enabled = false;
+  syncFollowHud();
 }
 function updateFlight(dt){
   if (!flight.active) return;
@@ -2343,11 +3465,12 @@ function updateFlight(dt){
     controls.enabled = true;
     if (flight.body) bodyWorldPos(flight.body, lastBodyPos);
     if (flight.onDone) flight.onDone();
+    syncFollowHud();
   }
 }
-function flyToBody(body, onDone){
+function flyToBody(body, onDone, customDist = null){
   const bp = bodyWorldPos(body, new THREE.Vector3());
-  const dist = body.radius * CONFIG.followDistFactor + 2;
+  const dist = customDist ?? (body.radius * CONFIG.followDistFactor + 2);
   const dir = camera.position.clone().sub(bp);
   dir.y = Math.abs(dir.y) * 0.5 + body.radius * 0.55;
   if (dir.lengthSq() < 1e-4) dir.set(0, 1, 1);
@@ -2356,6 +3479,7 @@ function flyToBody(body, onDone){
   bodyWorldPos(body, lastBodyPos);
   startFlight(bp.clone().add(dir), bp, { body, offset: dir, onDone: () => {
     followBody = body;
+    syncFollowHud();
     if (onDone) onDone();
   }});
 }
@@ -2370,7 +3494,47 @@ function updateFollow(){
 function flyOverview(){
   followBody = null;
   startFlight(new THREE.Vector3(...CONFIG.cameraPos), new THREE.Vector3(0, 0, 0), {});
+  syncFollowHud();
 }
+
+ui.btnFollowClose?.addEventListener('click', () => {
+  const target = followBody || flight.body;
+  if (!target) return;
+  if (target === cometBody){
+    setHighlightedCometPart('nucleus');
+    flyToCometFollowView('nucleus');
+    return;
+  }
+  const closeDist = Math.max(target.radius * 2.25 + 0.85, 1.75);
+  flyToBody(target, null, closeDist);
+});
+ui.btnFollowMoons?.addEventListener('click', () => {
+  const target = followBody || flight.body;
+  if (!target || !target.moons?.length) return;
+  const maxMoonDist = Math.max(...target.moons.map(m => m.def.dist));
+  const bp = bodyWorldPos(target, new THREE.Vector3());
+  const dir = camera.position.clone().sub(bp);
+  dir.y = Math.max(Math.abs(dir.y), maxMoonDist * 0.85);
+  if (dir.lengthSq() < 1e-4) dir.set(0.6, 0.8, 1);
+  dir.normalize().multiplyScalar(maxMoonDist * 2.25 + 2.2);
+  followBody = null;
+  bodyWorldPos(target, lastBodyPos);
+  startFlight(bp.clone().add(dir), bp, { body: target, offset: dir, onDone: () => {
+    followBody = target;
+    syncFollowHud();
+  }});
+});
+ui.btnFollowExit?.addEventListener('click', () => {
+  if (cometMode.active && cometMode.view === 'follow'){
+    flyToCometOrbitView();
+    return;
+  }
+  flight.active = false;
+  flight.body = null;
+  controls.enabled = true;
+  followBody = null;
+  syncFollowHud();
+});
 
 let scenarioSavedTimeScale = CONFIG.defaultSpeed;
 const scenarioMode = createScenarioMode({
@@ -2383,8 +3547,12 @@ const scenarioMode = createScenarioMode({
   setFollowBody:body => {
     followBody = body;
     bodyWorldPos(body, lastBodyPos);
+    syncFollowHud();
   },
-  clearFollowBody:() => { followBody = null; },
+  clearFollowBody:() => {
+    followBody = null;
+    syncFollowHud();
+  },
   setScaleMode,
   onEnter:() => {
     if (cmp.active) exitCmp(false);
@@ -2395,8 +3563,12 @@ const scenarioMode = createScenarioMode({
     scenarioSavedTimeScale = timeScale;
     setTimeScale(0);
     navButtons.forEach(button => button.setAttribute('aria-current', 'false'));
+    syncFollowHud();
   },
-  onExit:() => setTimeScale(scenarioSavedTimeScale)
+  onExit:() => {
+    setTimeScale(scenarioSavedTimeScale);
+    syncFollowHud();
+  }
 });
 
 /* ============================================================
@@ -2592,8 +3764,13 @@ function selectMeteorShower(index){
 
   meteorTravelDir.fromArray(shower.direction).normalize();
   const color = new THREE.Color(shower.color);
-  meteorAtmosphereMat.color.copy(color);
-  meteorStreaks.forEach(streak => streak.line.material.color.copy(color));
+  meteorAtmosphereShellMat.uniforms.uColor.value.copy(color);
+  radiantRing1.material.color.copy(color);
+  radiantRing2.material.color.copy(color);
+  meteorStreaks.forEach(streak => {
+    streak.line.material.color.copy(color);
+    streak.headSprite.material.color.copy(color).lerp(new THREE.Color(0xffffff), 0.45);
+  });
   resetMeteorStreaks();
 }
 function flyToMeteorView(){
@@ -2606,6 +3783,7 @@ function flyToMeteorView(){
   bodyWorldPos(earthBody, lastBodyPos);
   startFlight(bp.clone().add(offset), bp, { body:earthBody, offset, onDone:() => {
     followBody = earthBody;
+    syncFollowHud();
   }});
 }
 function enterMeteorMode(){
@@ -2637,6 +3815,7 @@ function exitMeteorMode(fly = true){
   ui.meteorNav.setAttribute('aria-current', 'false');
   document.body.classList.remove('meteor-open');
   followBody = null;
+  syncFollowHud();
   if (fly) flyOverview();
 }
 meteorMode.selected = featuredMeteorIndex();
@@ -2647,6 +3826,16 @@ ui.meteorClose.addEventListener('click', () => exitMeteorMode());
    혜성 탐험
 ============================================================ */
 const cometMode = { active:false, selected:0, view:'orbit', buttons:[] };
+
+function setHighlightedCometPart(part){
+  highlightedCometPart = part;
+  cometTermButtons.forEach(btn => {
+    btn.setAttribute('aria-pressed', String(btn.dataset.cometPart === part));
+  });
+  Object.entries(cometPartLabels).forEach(([key, labelObj]) => {
+    labelObj.element.classList.toggle('active', key === part);
+  });
+}
 
 function buildCometList(){
   if (cometMode.buttons.length) return;
@@ -2701,10 +3890,14 @@ function setCometViewMode(view){
   const collapsePanel = orbitActive && cometMode.active && innerWidth <= 560;
   document.body.classList.toggle('comet-orbit-focus', collapsePanel);
   ui.cometPanel.setAttribute('aria-hidden', String(!cometMode.active || collapsePanel));
+  Object.values(cometPartLabels).forEach(lbl => {
+    lbl.visible = !orbitActive && cometMode.active;
+  });
 }
 function flyToCometOrbitView(){
   setCometViewMode('orbit');
   followBody = null;
+  syncFollowHud();
   const compact = innerWidth <= 560;
   const center = cometOrbitViewSphere.center.clone();
   const radius = cometOrbitViewSphere.radius;
@@ -2724,19 +3917,31 @@ function flyToCometOrbitView(){
     center.clone().add(targetOffset), {}
   );
 }
-function flyToCometFollowView(){
+function flyToCometFollowView(focusPart = null){
   setCometViewMode('follow');
   const bp = bodyWorldPos(cometBody, new THREE.Vector3());
   followBody = null;
   const compact = innerWidth <= 560;
-  const offset = compact
-    ? new THREE.Vector3(4, 8, 20)
-    : new THREE.Vector3(4, 5, 15);
+  let localOffset = compact ? new THREE.Vector3(-3.2, 7.2, -18.5) : new THREE.Vector3(-2.6, 4.8, -14.2);
+  let localTarget = compact ? new THREE.Vector3(2.8, -3.5, 0.6) : new THREE.Vector3(3.4, 0, 0.7);
+  if (focusPart === 'nucleus'){
+    localOffset = compact ? new THREE.Vector3(-2.3, 2.2, -5.2) : new THREE.Vector3(-1.85, 1.35, -3.85);
+    localTarget = compact ? new THREE.Vector3(-0.1, -0.8, 0) : new THREE.Vector3(-0.15, 0, 0);
+  } else if (focusPart === 'coma'){
+    localOffset = compact ? new THREE.Vector3(-3.0, 4.4, -10.5) : new THREE.Vector3(-2.4, 3.0, -8.2);
+    localTarget = compact ? new THREE.Vector3(0.4, -2.0, 0.2) : new THREE.Vector3(0.6, 0, 0.2);
+  } else if (focusPart === 'dust' || focusPart === 'ion'){
+    localOffset = compact ? new THREE.Vector3(-1.2, 8.8, -21.5) : new THREE.Vector3(-1.0, 6.0, -16.8);
+    localTarget = new THREE.Vector3(6.4, compact ? -3.5 : 0, focusPart === 'dust' ? 1.8 : 0.3);
+  }
+  const offset = localOffset.applyQuaternion(cometTailFrame.quaternion);
+  offset.y = Math.max(Math.abs(offset.y), focusPart === 'nucleus' ? 1.25 : 2.8);
+  const targetOffset = localTarget.applyQuaternion(cometTailFrame.quaternion);
   bodyWorldPos(cometBody, lastBodyPos);
-  const targetOffset = compact ? new THREE.Vector3(0, -7, 0) : new THREE.Vector3();
   startFlight(bp.clone().add(offset), bp.clone().add(targetOffset), {
     body:cometBody, offset, targetOffset, onDone:() => {
     followBody = cometBody;
+    syncFollowHud();
   }});
 }
 function enterCometMode(){
@@ -2767,19 +3972,43 @@ function exitCometMode(fly = true){
   ui.cometNav.setAttribute('aria-current', 'false');
   document.body.classList.remove('comet-open');
   followBody = null;
+  setHighlightedCometPart(null);
   setCometViewMode('orbit');
+  Object.values(cometPartLabels).forEach(lbl => { lbl.visible = false; });
   if (cometOrbitLine) cometOrbitLine.material.opacity = 0.3;
   setScaleMode('illustrative');
+  syncFollowHud();
   if (fly) flyOverview();
 }
 ui.cometNav.addEventListener('click', () => cometMode.active ? exitCometMode() : enterCometMode());
 ui.cometClose.addEventListener('click', () => exitCometMode());
-ui.cometOrbitView.addEventListener('click', flyToCometOrbitView);
-ui.cometFollowView.addEventListener('click', flyToCometFollowView);
+ui.cometOrbitView.addEventListener('click', () => {
+  setHighlightedCometPart(null);
+  flyToCometOrbitView();
+});
+ui.cometFollowView.addEventListener('click', () => flyToCometFollowView(highlightedCometPart));
 ui.cometInfoToggle.addEventListener('click', () => {
   document.body.classList.remove('comet-orbit-focus');
   ui.cometPanel.setAttribute('aria-hidden', 'false');
   ui.cometPanel.scrollTop = 0;
+});
+cometTermButtons.forEach(btn => {
+  const part = btn.dataset.cometPart;
+  btn.addEventListener('click', () => {
+    const next = highlightedCometPart === part ? null : part;
+    setHighlightedCometPart(next);
+    if (cometMode.active && next){
+      flyToCometFollowView(next);
+    }
+  });
+  btn.addEventListener('pointerenter', () => {
+    if (!cometMode.active) return;
+    Object.entries(cometPartLabels).forEach(([k, lbl]) => lbl.element.classList.toggle('active', k === part));
+  });
+  btn.addEventListener('pointerleave', () => {
+    if (!cometMode.active) return;
+    Object.entries(cometPartLabels).forEach(([k, lbl]) => lbl.element.classList.toggle('active', k === highlightedCometPart));
+  });
 });
 
 /* ============================================================
@@ -2825,6 +4054,7 @@ function exitTour(fly = true){
   document.body.classList.remove('tour-active');
   hideInfo();
   followBody = null;
+  syncFollowHud();
   if (fly) flyOverview();
 }
 ui.tourPrev.addEventListener('click', () => { if (tour.active) tourGo(tour.idx - 1); });
@@ -2856,6 +4086,7 @@ function enterCmp(){
   cmp.savedCam.copy(camera.position);
   cmp.savedTarget.copy(controls.target);
   followBody = null;
+  syncFollowHud();
   hideInfo();
   setSceneVisible(false);
   cmp.group.visible = true;
@@ -2888,13 +4119,28 @@ ui.btnCompare.addEventListener('click', () => cmp.active ? exitCmp() : enterCmp(
 ============================================================ */
 function setTimeScale(value, syncSlider = true){
   timeScale = Number(value);
+  if (timeScale > 0) lastNonZeroSpeed = timeScale;
   if (syncSlider) ui.speed.value = String(timeScale);
   ui.speedLabel.textContent = timeScale === 0 ? '정지' : `${timeScale}배속`;
+  if (ui.btnPlayPause){
+    const paused = timeScale === 0;
+    ui.btnPlayPause.textContent = paused ? '▶' : '⏸';
+    ui.btnPlayPause.setAttribute('aria-label', paused ? '시간 재생' : '시간 일시정지');
+    ui.btnPlayPause.title = paused ? '재생 (Space)' : '일시정지 (Space)';
+  }
   speedPresetButtons.forEach(button => {
     button.classList.toggle('active', Number(button.dataset.speed) === timeScale);
   });
 }
 ui.speed.addEventListener('input', e => setTimeScale(e.target.value, false));
+ui.btnPlayPause?.addEventListener('click', () => {
+  setTimeScale(timeScale === 0 ? (lastNonZeroSpeed || CONFIG.defaultSpeed) : 0);
+});
+ui.controlsToggle?.addEventListener('click', () => {
+  const collapsed = ui.controlsPanel.classList.toggle('collapsed');
+  ui.controlsToggle.setAttribute('aria-expanded', String(!collapsed));
+  ui.controlsToggle.textContent = collapsed ? '펼치기' : '접기';
+});
 speedPresetButtons.forEach(button => {
   button.addEventListener('click', () => setTimeScale(button.dataset.speed));
 });
@@ -2948,7 +4194,12 @@ ui.btnOverview.addEventListener('click', resetView);
 ui.btnTour.addEventListener('click', () => tour.active ? exitTour() : startTour());
 
 window.addEventListener('keydown', e => {
-  const editing = /INPUT|TEXTAREA|SELECT/.test(document.activeElement?.tagName || '');
+  const editing = /INPUT|TEXTAREA|SELECT|BUTTON/.test(document.activeElement?.tagName || '');
+  if (!editing && e.code === 'Space' && !scenarioMode.active){
+    e.preventDefault();
+    setTimeScale(timeScale === 0 ? (lastNonZeroSpeed || CONFIG.defaultSpeed) : 0);
+    return;
+  }
   if (!editing && /^[1-9]$/.test(e.key)){
     selectBody(Number(e.key) - 1);
     return;
@@ -3005,11 +4256,16 @@ function updateHover(dt){
   for (const b of [...planetBodies]){
     const target = (b === hovered && !cmp.active) ? 1 : 0;
     b.hoverT += (target - b.hoverT) * Math.min(1, dt * 9);
-    b.material.emissiveIntensity = (b.baseEmissive || 0) + b.hoverT * 0.4;
+    if (b === earthBody){
+      b.material.emissiveIntensity = b.baseEmissive || 0.35;
+      earthShaderUniforms.uHover.value = b.hoverT * 0.45;
+    } else {
+      b.material.emissiveIntensity = (b.baseEmissive || 0) + b.hoverT * 0.4;
+    }
   }
   const cometTarget = hovered === cometBody && !cmp.active ? 1 : 0;
   cometBody.hoverT += (cometTarget - cometBody.hoverT) * Math.min(1, dt * 9);
-  cometNucleusMaterial.emissiveIntensity = 0.24 + cometBody.hoverT * 0.32;
+  cometNucleusMaterial.emissiveIntensity = 0.24 + cometBody.hoverT * 0.32 + (highlightedCometPart === 'nucleus' ? 0.38 : 0);
   if (hovered){
     const fade = labelFadeFor(hovered);   // U8: 근접 시 호버 링 페이드
     hoverRing.visible = fade > 0.02;
@@ -3054,14 +4310,21 @@ window.addEventListener('resize', () => {
 });
 
 /* ============================================================
-   U6: 대기 셸 태양 방향 uniform 갱신 · U8: 거리 기반 라벨 페이드
+   U6: 대기 셸·야간 불빛·고리 그림자 태양 방향 uniform 갱신 · U8: 거리 기반 라벨 페이드
 =========================================================== */
 function updateAtmospheres(){
   if (!sceneGroup.visible) return;
   for (const b of planetBodies){
-    if (!b.rimMat) continue;
     bodyWorldPos(b, tmpV);
-    b.rimMat.uniforms.uSunDir.value.copy(tmpV).negate().normalize(); // 태양(원점) 방향
+    if (b.rimMat){
+      b.rimMat.uniforms.uSunDir.value.copy(tmpV).negate().normalize(); // 태양(원점) 방향
+    }
+    if (b === earthBody){
+      earthShaderUniforms.uSunDir.value.copy(tmpV).negate().normalize();
+    }
+    if (b.ringMat){
+      b.ringMat.uniforms.uPlanetPos.value.copy(tmpV);
+    }
   }
 }
 function labelFadeFor(body){
@@ -3073,9 +4336,24 @@ function labelFadeFor(body){
 function updateLabelFade(){
   if (!sceneGroup.visible) return;
   for (const b of planetBodies){
-    if (!b.label || !b.label.element) continue;
-    const fade = labelFadeFor(b);
-    b.label.element.style.opacity = (fade * (labelsOn ? 0.85 : 0)).toFixed(3);
+    if (b.label && b.label.element){
+      const fade = labelFadeFor(b);
+      b.label.element.style.opacity = (fade * (labelsOn ? 0.85 : 0)).toFixed(3);
+    }
+    if (b.moons && b.moons.length){
+      bodyWorldPos(b, tmpV);
+      const dist = camera.position.distanceTo(tmpV);
+      const isFocused = followBody === b || flight.body === b;
+      const nearFactor = isFocused ? 1 : THREE.MathUtils.clamp(1 - (dist - b.radius * 4) / 28, 0, 1);
+      const showMoonLabels = labelsOn && nearFactor > 0.15 && !meteorMode.active;
+      for (const m of b.moons){
+        m.orbitLineMat.opacity = 0.07 + nearFactor * 0.34;
+        m.label.visible = showMoonLabels;
+        if (m.label.element){
+          m.label.element.style.opacity = (nearFactor * 0.92).toFixed(3);
+        }
+      }
+    }
   }
 }
 
@@ -3135,8 +4413,13 @@ function tick(timestamp){
         -CONFIG.spinClamp, CONFIG.spinClamp);
       b.mesh.rotation.y += spin;
       if (b.clouds) b.clouds.rotation.y += spin * 1.18 + dt * 0.006;
+      if (b.moons && b.moons.length){
+        for (const m of b.moons){
+          m.pivot.rotation.y = (m.pivot.rotation.y + Math.min(TAU * days / m.def.periodDays, 0.35)) % TAU;
+          m.mesh.rotation.y += spin * 0.25;
+        }
+      }
     }
-    if (moonPivot) moonPivot.rotation.y += Math.min(TAU * days / 27.3, 0.3);
     updateCometShowcase(dt);
     if (meteorMode.active) updateMeteorShower(dt);
     asteroidDaysAccum += days;
@@ -3179,8 +4462,8 @@ function tick(timestamp){
     camera.fov = CONFIG.cameraFov + Math.sin(worldTime * 0.15) * 0.3;
     camera.updateProjectionMatrix();
   }
-  updateAtmospheres();   // U6: 대기 셸 태양 방향 uniform
-  updateLabelFade();     // U8: 거리 기반 라벨 페이드
+  updateAtmospheres();   // U6: 대기 셸·야간 불빛·고리 그림자 태양 방향 uniform
+  updateLabelFade();     // U8: 거리 기반 라벨 및 위성 궤도 페이드
 
   controls.update();
   composer.render();

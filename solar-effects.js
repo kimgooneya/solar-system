@@ -90,28 +90,50 @@ function makeProminenceMaterial(timeUniform, phase){
     uniforms: {
       uTime: timeUniform,
       uPhase: { value: phase },
-      uOpacity: { value: 0.2 }
+      uOpacity: { value: 0.28 }
     },
     vertexShader: `
       varying vec2 vUv;
+      varying vec3 vNormal;
+      varying vec3 vViewDir;
+      varying vec3 vWorldPos;
       void main(){
         vUv = uv;
-        gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+        vNormal = normalize(normalMatrix * normal);
+        vec4 mv = modelViewMatrix * vec4(position, 1.0);
+        vViewDir = -normalize(mv.xyz);
+        vWorldPos = (modelMatrix * vec4(position, 1.0)).xyz;
+        gl_Position = projectionMatrix * mv;
       }`,
-    fragmentShader: `
+    fragmentShader: PLASMA_NOISE_GLSL + `
       uniform float uTime;
       uniform float uPhase;
       uniform float uOpacity;
       varying vec2 vUv;
+      varying vec3 vNormal;
+      varying vec3 vViewDir;
+      varying vec3 vWorldPos;
       void main(){
-        float endFade = smoothstep(0.0, 0.12, vUv.x)
-          * smoothstep(1.0, 0.88, vUv.x);
-        float flow = 0.68 + 0.32 * sin(vUv.x * 20.0 - uTime * 3.1 + uPhase);
-        vec3 color = mix(
-          vec3(0.42, 0.006, 0.0),
-          vec3(0.94, 0.16, 0.008),
-          flow);
-        gl_FragColor = vec4(color, uOpacity * endFade * flow);
+        // Footpoint fade at solar surface ends
+        float endFade = smoothstep(0.0, 0.16, vUv.x) * smoothstep(1.0, 0.84, vUv.x);
+        // Cross-section Fresnel softness so tube edges never look like hard pipes
+        float ndv = clamp(abs(dot(normalize(vNormal), normalize(vViewDir))), 0.0, 1.0);
+        float radialCore = pow(ndv, 1.65);
+
+        // Magnetic filamentary plasma streaming along the arch
+        vec3 samplePos = vec3(vUv.x * 9.0 - uTime * 0.55 + uPhase, vUv.y * 5.0, uTime * 0.22 + uPhase);
+        float fil1 = plasmaFbm(samplePos);
+        float fil2 = noise3(samplePos * 2.4 + vec3(uTime * 0.4, -uTime * 0.3, 1.3));
+        float filament = smoothstep(0.22, 0.82, fil1 * 0.68 + fil2 * 0.32);
+
+        vec3 deepRed = vec3(0.55, 0.015, 0.002);
+        vec3 brightOrange = vec3(1.0, 0.28, 0.02);
+        vec3 hotCore = vec3(1.0, 0.82, 0.38);
+        vec3 col = mix(deepRed, brightOrange, filament);
+        col = mix(col, hotCore, pow(filament * radialCore, 2.2) * 0.75);
+
+        float alpha = uOpacity * endFade * radialCore * (0.35 + filament * 0.95);
+        gl_FragColor = vec4(col, alpha);
       }`,
     transparent: true,
     blending: THREE.AdditiveBlending,
@@ -131,6 +153,28 @@ function seededRandom(seed){
   };
 }
 
+function buildTaperedArchGeometry(curve, tubularSegments, baseRadius, radialSegments){
+  const geometry = new THREE.TubeGeometry(curve, tubularSegments, baseRadius, radialSegments, false);
+  const pos = geometry.attributes.position;
+  const center = new THREE.Vector3();
+  const v = new THREE.Vector3();
+  const ringVerts = radialSegments + 1;
+  for (let i = 0; i <= tubularSegments; i++){
+    const u = i / tubularSegments;
+    curve.getPointAt(u, center);
+    // Taper at footpoints and crown with subtle plasma pinching
+    const archProfile = Math.pow(Math.sin(u * Math.PI), 0.55) * (0.72 + 0.45 * Math.sin(u * Math.PI * 3.0));
+    for (let j = 0; j < ringVerts; j++){
+      const idx = i * ringVerts + j;
+      v.fromBufferAttribute(pos, idx).sub(center).multiplyScalar(archProfile).add(center);
+      pos.setXYZ(idx, v.x, v.y, v.z);
+    }
+  }
+  pos.needsUpdate = true;
+  geometry.computeVertexNormals();
+  return geometry;
+}
+
 function makeProminence(radius, index, timeUniform){
   const random = seededRandom(8100 + index * 97);
   const theta = random() * Math.PI * 2;
@@ -145,28 +189,28 @@ function makeProminence(radius, index, timeUniform){
     : new THREE.Vector3(0, 1, 0);
   const tangent = new THREE.Vector3().crossVectors(normal, reference).normalize();
   const bitangent = new THREE.Vector3().crossVectors(normal, tangent).normalize();
-  const halfSpan = radius * (0.14 + random() * 0.11);
-  const height = radius * (0.16 + random() * 0.22);
+  const halfSpan = radius * (0.14 + random() * 0.12);
+  const height = radius * (0.16 + random() * 0.24);
   const twist = radius * (random() - 0.5) * 0.16;
 
   const surfacePoint = offset => normal.clone().multiplyScalar(radius)
     .addScaledVector(tangent, offset)
     .normalize()
-    .multiplyScalar(radius * 1.008);
+    .multiplyScalar(radius * 0.992);
   const points = [
     surfacePoint(-halfSpan),
-    normal.clone().multiplyScalar(radius + height * 0.58)
-      .addScaledVector(tangent, -halfSpan * 0.52)
+    normal.clone().multiplyScalar(radius + height * 0.62)
+      .addScaledVector(tangent, -halfSpan * 0.54)
       .addScaledVector(bitangent, twist),
     normal.clone().multiplyScalar(radius + height)
       .addScaledVector(bitangent, twist * 1.4),
-    normal.clone().multiplyScalar(radius + height * 0.58)
-      .addScaledVector(tangent, halfSpan * 0.52)
+    normal.clone().multiplyScalar(radius + height * 0.62)
+      .addScaledVector(tangent, halfSpan * 0.54)
       .addScaledVector(bitangent, twist),
     surfacePoint(halfSpan)
   ];
   const curve = new THREE.CatmullRomCurve3(points);
-  const geometry = new THREE.TubeGeometry(curve, 48, radius * 0.0075, 7, false);
+  const geometry = buildTaperedArchGeometry(curve, 56, radius * 0.022, 12);
   const phase = random() * Math.PI * 2;
   const material = makeProminenceMaterial(timeUniform, phase);
   const mesh = new THREE.Mesh(geometry, material);
@@ -178,7 +222,7 @@ export function createSolarEffects({ radius, reducedMotion = false, mobile = fal
   const timeUniform = { value: 0 };
   const plasma = makePlasmaShell(radius, timeUniform);
   const prominenceGroup = new THREE.Group();
-  const prominenceCount = reducedMotion ? 2 : mobile ? 3 : 4;
+  const prominenceCount = reducedMotion ? 2 : mobile ? 4 : 6;
   const prominences = [];
   for (let i = 0; i < prominenceCount; i++){
     const prominence = makeProminence(radius, i, timeUniform);
